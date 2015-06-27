@@ -15,18 +15,27 @@ elixir(function(mix) {
     
     // mix.phpUnit();
     
-    mix.less('app.less').styles([
-        'app.css'
-    ], 'public/css/_all.css', 'public/css');
+    mix
+        .copy('bower_components/bootstrap/less', 'resources/assets/less/bootstrap')
+        .less('app.less').styles([
+            'app.css'
+        ], 'public/css/_all.css', 'public/css');
     
-    mix.coffee().scripts([
-        'app.js',
-        'utils.js'
-    ], 'public/js/_all.js', 'public/js')
+    mix
+        .copy('bower_components/jquery/dist/jquery.js', 'public/js/jquery.js')
+        .copy('bower_components/bootstrap/dist/js/bootstrap.js', 'public/js/bootstrap.js')
+        .coffee()
+        .scripts([
+            'jquery.js',
+            'bootstrap.js',
+            'app.js',
+            'utils.js'
+        ], 'public/js/_all.js', 'public/js')
     
-    mix.version([
-        'public/css/_all.css',
-        'public/js/_all.js'
-    ]);
+    mix
+        .version([
+            'public/css/_all.css',
+            'public/js/_all.js'
+        ]);
     
 });
