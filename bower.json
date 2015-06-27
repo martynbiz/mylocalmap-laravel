@@ -1,0 +1,19 @@
+{
+  "name": "liftshare",
+  "version": "0.0.0",
+  "authors": [
+    "Martyn Bissett <martynbissett@yahoo.co.uk>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

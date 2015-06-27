@@ -1,0 +1,29 @@
+.comment {
+    position: relative;
+    background: #eee;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 5px #B2B2B2;
+}
+.comment:after, .comment:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+
+.comment:after {
+    border-color: rgba(238, 238, 238, 0);
+    border-right-color: #eee;
+    border-width: 10px;
+    margin-top: -10px;
+}
+.comment:before {
+    border-color: rgba(204, 204, 204, 0);
+    border-right-color: #ccc;
+    border-width: 11px;
+    margin-top: -11px;
+}
