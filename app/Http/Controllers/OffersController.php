@@ -35,15 +35,24 @@ class OffersController extends Controller {
 	public function index()
 	{
         // will throw an exception if not found
-        $offers = $this->offer
-            ->with('tags')
-            ->with('votes')
-            ->with('comments')
-            ->with('user')
-            ->get();
+        $offers = $this->offer->all();
         
         // render the view script, or json if ajax request
         return $this->render('offers.index', compact('offers'));
+	}
+
+	/**
+	 * Search for offers
+	 *
+	 * @return Response
+	 */
+	public function search()
+	{
+        // will throw an exception if not found
+        $offers = $this->offer->all();
+        
+        // render the view script, or json if ajax request
+        return $this->render('offers.search', compact('offers'));
 	}
 
 	/**
