@@ -15,12 +15,18 @@ elixir(function(mix) {
     
     // mix.phpUnit();
     
+    // fonts
+    mix
+        .copy('bower_components/bootstrap/dist/fonts', 'public/fonts')
+    
+    // css
     mix
         .copy('bower_components/bootstrap/less', 'resources/assets/less/bootstrap')
         .less('app.less').styles([
             'app.css'
         ], 'public/css/_all.css', 'public/css');
     
+    // javascript
     mix
         .copy('bower_components/jquery/dist/jquery.js', 'public/js/jquery.js')
         .copy('bower_components/bootstrap/dist/js/bootstrap.js', 'public/js/bootstrap.js')

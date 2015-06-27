@@ -1,12 +1,14 @@
 <?php namespace App\Http\Controllers;
 
+// libraries
 use Illuminate\Auth\AuthManager;
 
+// models
 use App\Offer;
+use App\City;
 
+// requests
 use App\Http\Requests\OfferRequest;
-
-use App\Library\Utils;
 
 class OffersController extends Controller {
     
@@ -32,27 +34,15 @@ class OffersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(City $city)
 	{
         // will throw an exception if not found
         $offers = $this->offer->all();
         
-        // render the view script, or json if ajax request
-        return $this->render('offers.index', compact('offers'));
-	}
-
-	/**
-	 * Search for offers
-	 *
-	 * @return Response
-	 */
-	public function search()
-	{
-        // will throw an exception if not found
-        $offers = $this->offer->all();
+        $cities = $city->all();
         
         // render the view script, or json if ajax request
-        return $this->render('offers.search', compact('offers'));
+        return $this->render('offers.index', compact('offers', 'cities'));
 	}
 
 	/**

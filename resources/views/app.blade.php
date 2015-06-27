@@ -28,12 +28,23 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Laravel</a>
+				<a class="navbar-brand" href="#">Liftshare</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
-					<li><a href="{{ url('/') }}">Home</a></li>
+					<li>
+						<a href="{{ url('/') }}">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+							Home
+						</a>
+					</li>
+					<li>
+						<a href="{{ url('/') }}">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+							Offer a lift
+						</a>
+					</li>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
@@ -42,8 +53,16 @@
 						<li><a href="{{ url('/auth/register') }}">Register</a></li>
 					@else
 						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Notifications <span class="badge">2</span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">Glasgow &gt; London request</a></li>
+								<li><a href="#">Logout</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ Auth::user()->name }} <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
+								<li><a href="#">My Account</a></li>
 								<li><a href="{{ url('/auth/logout') }}">Logout</a></li>
 							</ul>
 						</li>
