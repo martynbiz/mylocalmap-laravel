@@ -29,18 +29,19 @@ class IndexController extends Controller {
 		
 	}
 
-	/**
-	 * Show the application dashboard to the user.
-	 *
-	 * @return Response
-	 */
 	public function index()
+	{
+		// render the view script, or json if ajax request
+        return $this->render('index.list', compact('offers', 'cityOptions'));
+	}
+
+	public function map()
 	{
 		// generate regions/cities array
 		$cityOptions = SelectOptions::cities('Jump to...');
         
         // render the view script, or json if ajax request
-        return $this->render('index.index', compact('offers', 'cityOptions'));
+        return $this->render('index.map', compact('offers', 'cityOptions'));
 	}
 
 }

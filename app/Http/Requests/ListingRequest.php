@@ -2,7 +2,7 @@
 
 use App\Http\Requests\Request;
 
-class VoteRequest extends Request {
+class ListingRequest extends Request {
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -22,8 +22,10 @@ class VoteRequest extends Request {
 	public function rules()
 	{
 		return [
-			'score' => 'required',
-			'proposal_id' => 'required',
+			'name' => 'required|min:3',
+			'description_short' => 'required|min:3',
+			'address' => 'required|min:3',
+			'city_id' => 'required',
 		];
 	}
 

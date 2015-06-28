@@ -7,6 +7,10 @@
 	@include('partials.header')
 	
 	<div id="layout_content" class="container">
+		
+		@include('partials.flash')
+		@include ('partials.errors')
+		
 		@yield('content')
 	</div>
 	

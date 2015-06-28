@@ -30,31 +30,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
     
-    /**
-    * User has many proposals
-    * @return \Illuminte\Database\Eloquent\Relations\HasMany
-    */    
-    public function proposals()
-    {
-        return $this->hasMany('App\Proposal');
-    }
+    
+    // relationships
     
     /**
-    * User has many votes
+    * User has many listings
     * @return \Illuminte\Database\Eloquent\Relations\HasMany
     */    
-    public function votes()
+    public function listings()
     {
-        return $this->hasMany('App\Vote');
-    }
-    
-    /**
-    * User has many comments
-    * @return \Illuminte\Database\Eloquent\Relations\HasMany
-    */    
-    public function comments()
-    {
-        return $this->hasMany('App\Comment');
+        return $this->hasMany('App\Listing');
     }
     
     

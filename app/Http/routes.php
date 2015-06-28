@@ -12,6 +12,7 @@
 */
 
 Route::get('/', 'IndexController@index');
+Route::get('/map', 'IndexController@map');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',

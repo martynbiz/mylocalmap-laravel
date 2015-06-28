@@ -16,9 +16,8 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 				<li>
-					<a href="{{ url('listings/create') }}">
-						<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-						Add listing
+					<a href="{{ url('about') }}">
+						About us
 					</a>
 				</li>
 			</ul>

@@ -54,7 +54,7 @@ class ListingsController extends Controller {
 		$cityOptions = SelectOptions::cities();
         
         // render the view script, or json if ajax request
-        return $this->render('listings.create', compact('cityOptions', 'hourOptions', 'minuteOptions'));
+        return $this->render('listings.create', compact('cityOptions'));
 	}
 
 	/**

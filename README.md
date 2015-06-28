@@ -6,6 +6,11 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
+CREATE LISTING:
+- look up lat/lng
+- redirect to..?
+
+
 Jump to.. jump to location
 
 Map needs data 
@@ -13,9 +18,13 @@ Map needs data
 - create some apis for pulling the data on load
 
 MAP (google maps api, clustering, ui filters)
-Filters - Food: supermarkets, farmers' market, butchers, greengrocers, bakery, fish mongers, ; co-operatives, 
+Filters - Food: supermarkets, farmers' market, butchers, greengrocers, bakery, fish mongers, coffee shops, alchohol; co-operatives, indy record shops, second hand ; clothing, 
 On change: reload data
 http://fronteed.com/iCheck/
+
+TESTING
+- *_testing database
+- mock auth
 
 
 

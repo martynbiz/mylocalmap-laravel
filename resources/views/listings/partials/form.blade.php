@@ -10,7 +10,6 @@
 		    {!! Form::text('name', null, [
 		    	'class'=>'form-control', 
 		    	'placeholder' => 'Ex. Queens Park Farmers\'s Market',
-		    	'required' => true,
 		    ]) !!}
 		</div>
 	</div>
@@ -22,7 +21,6 @@
 		    	'class'=>'form-control', 
 		    	'length' => 64, 
 		    	'placeholder' => 'Ex. Wide range of local produce from farmers in the Glasgow area.',
-		    	'required' => true,
 		    ]) !!}
 		</div>
 	</div>
@@ -30,7 +28,7 @@
 	<div class="form-group">
 	    {!! Form::label('description_long', 'Long description (optional)', ['class' => 'col-md-2']) !!}
 	    <div class="col-md-10">
-		    {!! Form::textarea('description_short', null, [
+		    {!! Form::textarea('description_long', null, [
 		    	'class'=>'form-control',
 	    		'rows' => 4,
 		    ]) !!}
@@ -46,7 +44,6 @@
 		    {!! Form::text('address', null, [
 		    	'class'=>'form-control', 
 		    	'placeholder' => 'Ex. 123 Victoria Road, Queens Park',
-		    	'required' => true,
 		    ]) !!}
 		</div>
 	</div>
@@ -54,7 +51,7 @@
 	<div class="form-group">
 	    {!! Form::label('city_id', 'City', ['class' => 'col-md-2']) !!}
 	    <div class="col-md-10">
-		    {!! Form::select('city_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
+		    {!! Form::select('city_id', $cityOptions, null, ['class' => 'form-control']) !!}
 		</div>
 	</div>
 </div>
