@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRegions extends Migration {
+class CreateRegionsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -15,9 +15,15 @@ class CreateTableRegions extends Migration {
 		Schema::create('regions', function(Blueprint $table)
 		{
 			$table->increments('id');
-			$table->timestamps();
 			
+			// fields
 			$table->string('name');
+			$table->string('code');
+			$table->string('adm1_code');
+			
+			// timestamps
+			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

@@ -3834,7 +3834,7 @@ tbody.collapse.in {
 .navbar {
   position: relative;
   min-height: 50px;
-  margin-bottom: 0;
+  margin-bottom: 20px;
   border: 1px solid transparent;
 }
 @media (min-width: 768px) {
@@ -5281,6 +5281,11 @@ a.list-group-item:focus h4,
 button.list-group-item:focus h4 {
   color: #ffffff;
 }
+body.with_bigmap {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
 .bigmap-menu {
   position: absolute;
   width: 30%;
@@ -5300,10 +5305,11 @@ button.list-group-item:focus h4 {
 html {
   height: 100%;
 }
-body {
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
+#layout_content {
+  position: relative;
+}
+.navbar .badge {
+  background: #e67e22;
 }
 
 /*# sourceMappingURL=app.css.map */

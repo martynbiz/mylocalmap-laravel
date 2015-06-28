@@ -1,127 +1,62 @@
-<div class="row">
-	<div class="col-md-12 offer-heading">
-		
-		<div class="well">
-			<div class="col-md-6 left-col">
-				<ol class="breadcrumb">
-					<li><a href="{{ url('/home') }}">Home</a></li>
-					<li class="active">Create a new lift</li>
-				</ol>
-			</div>
-			
-			<div class="col-md-6 right-col hidden-xs">
-				{!! Form::submit('Next', ['class'=>'btn btn-primary']) !!}
-			</div>
+<ol class="breadcrumb">
+	<li><a href="{{ url('/') }}">Home</a></li>
+	<li class="active">Add listing</li>
+</ol>
+
+<div class="well col-md-12">
+	<div class="form-group">
+	    {!! Form::label('name', 'Name', ['class' => 'col-md-2']) !!}
+	    <div class="col-md-10">
+		    {!! Form::text('name', null, [
+		    	'class'=>'form-control', 
+		    	'placeholder' => 'Ex. Queens Park Farmers\'s Market',
+		    	'required' => true,
+		    ]) !!}
 		</div>
-		
+	</div>
+
+	<div class="form-group">
+	    {!! Form::label('description_short', 'Short description', ['class' => 'col-md-2']) !!}
+	    <div class="col-md-10">
+		    {!! Form::text('description_short', null, [
+		    	'class'=>'form-control', 
+		    	'length' => 64, 
+		    	'placeholder' => 'Ex. Wide range of local produce from farmers in the Glasgow area.',
+		    	'required' => true,
+		    ]) !!}
+		</div>
+	</div>
+
+	<div class="form-group">
+	    {!! Form::label('description_long', 'Long description (optional)', ['class' => 'col-md-2']) !!}
+	    <div class="col-md-10">
+		    {!! Form::textarea('description_short', null, [
+		    	'class'=>'form-control',
+	    		'rows' => 4,
+		    ]) !!}
+		</div>
 	</div>
 </div>
 
-<div class="row offer-setup">
-	<div class="col-md-10 col-md-offset-1 offer-setup">
-		
-		<div class="well">
-			<div class="col-md-6">
-				
-			</div>
-			
-			<div class="col-md-6">
-				
-				
-				
-			</div>
+
+<div class="well col-md-12">
+	<div class="form-group">
+	    {!! Form::label('address', 'Address', ['class' => 'col-md-2']) !!}
+	    <div class="col-md-10">
+		    {!! Form::text('address', null, [
+		    	'class'=>'form-control', 
+		    	'placeholder' => 'Ex. 123 Victoria Road, Queens Park',
+		    	'required' => true,
+		    ]) !!}
 		</div>
-		
+	</div>
+	
+	<div class="form-group">
+	    {!! Form::label('city_id', 'City', ['class' => 'col-md-2']) !!}
+	    <div class="col-md-10">
+		    {!! Form::select('city_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
+		</div>
 	</div>
 </div>
 
-<hr>
-
-<div class="row offer-builder">
-	
-	<div class="col-md-3">
-		<div class="city-box start">
-			<div class="form-group">
-				{!! Form::label('start_id', 'From:', ['class' => 'col-md-3 control-label']) !!}
-				<div class="col-md-9">
-					{!! Form::select('start_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
-					{!! Form::select('start_hour', $hourOptions, null, ['name'=>'start_hour[]']) !!} :
-					{!! Form::select('start_minute', $minuteOptions, null, ['name'=>'start_minute[]']) !!}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-md-1">
-		<div class="city-box-div">
-			<button type="submit" value="submit_add_city" formaction="?index=1">
-				<span class="glyphicon" aria-hidden="true"></span>
-				<span class="sr-only">Add city</span>
-			</button>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="city-box">
-			<div class="form-group">
-				{!! Form::label('start_id', 'Via:', ['class' => 'col-md-3 control-label']) !!}
-				<div class="col-md-9">
-					{!! Form::select('start_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
-					{!! Form::select('start_hour', $hourOptions, null, ['name'=>'start_hour[]']) !!} :
-					{!! Form::select('start_minute', $minuteOptions, null, ['name'=>'start_minute[]']) !!}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-md-1">
-		<div class="city-box-div">
-			<button type="submit" value="submit_add_city" formaction="?index=1">
-				<span class="glyphicon" aria-hidden="true"></span>
-				<span class="sr-only">Add city</span>
-			</button>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="city-box">
-			<div class="form-group">
-				{!! Form::label('start_id', 'To:', ['class' => 'col-md-3 control-label']) !!}
-				<div class="col-md-9">
-					{!! Form::select('start_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
-					{!! Form::select('start_hour', $hourOptions, null, ['name'=>'start_hour[]']) !!} :
-					{!! Form::select('start_minute', $minuteOptions, null, ['name'=>'start_minute[]']) !!}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-md-1">
-		<div class="city-box-div">
-			<button type="submit" value="submit_add_city" formaction="?index=1">
-				<span class="glyphicon" aria-hidden="true"></span>
-				<span class="sr-only">Add city</span>
-			</button>
-		</div>
-	</div>
-	<div class="col-md-3">
-		<div class="city-box end">
-			<div class="form-group">
-				{!! Form::label('start_id', 'To:', ['class' => 'col-md-3 control-label']) !!}
-				<div class="col-md-9">
-					{!! Form::select('start_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
-					{!! Form::select('start_hour', $hourOptions, null, ['name'=>'start_hour[]']) !!} :
-					{!! Form::select('start_minute', $minuteOptions, null, ['name'=>'start_minute[]']) !!}
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="col-md-12 offer-builder-footer">
-		
-		<div class="well">
-			<div class="col-md-12 right-col">
-				{!! Form::submit('Next', ['class'=>'btn btn-primary']) !!}
-			</div>
-		</div>
-		
-	</div>
-</div>
+{!! Form::submit($btnText, ['class'=>'btn btn-primary form-control']) !!}

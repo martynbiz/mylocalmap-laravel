@@ -1,9 +1,14 @@
-@extends('app')
+@extends('default')
 
 @section('content')
-	@include ('partials.errors')
-    
-    {!! Form::open(['action' => 'OffersController@store', 'method' => 'POST']) !!}
-        @include ('offers.partials.form', ['btnText' => 'Offer lift'])
-    {!! Form::close() !!}
+	<div class="container">
+		
+		@include('partials.flash')
+		@include ('partials.errors')
+
+		{!! Form::open(['action' => 'ListingsController@store', 'method' => 'POST']) !!}
+			@include ('listings.partials.form', ['btnText' => 'Add listing'])
+		{!! Form::close() !!}
+		
+	</div>
 @stop

@@ -53,7 +53,7 @@ class SelectOptions
             ->get();
         
         foreach ($regions as $region) {
-            $cities[$region->name] = $region->cities->lists('name', 'name');
+            $cities[$region->name] = $region->cities->lists('name', 'id');
         }
         
         return $cities;

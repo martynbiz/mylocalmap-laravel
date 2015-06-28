@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOffersTable extends Migration {
+class CreateListingsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,27 +12,20 @@ class CreateOffersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('offers', function(Blueprint $table)
+		Schema::create('listings', function(Blueprint $table)
 		{
 			$table->increments('id');
 			
 			// fields
-			$table->integer('start_id')
+			$table->string('name');
+			$table->string('description_short');
+			$table->text('description_long');
+			$table->string('address');
+			$table->integer('city_id')
 				->unsigned()
 				->index();
-			$table->datetime('start_time');
-			
-			$table->integer('end_id')
-				->unsigned()
-				->index();
-			$table->datetime('end_time');
-			
-			$table->decimal('price', 5, 2);
-			$table->integer('price_type');
-			
-			$table->integer('seats_total');
-			$table->integer('seats_available');
-			
+			$table->decimal('lat', 10, 6);
+			$table->decimal('lng', 10, 6);
 			$table->integer('user_id')
 				->unsigned()
 				->index();
@@ -41,12 +34,7 @@ class CreateOffersTable extends Migration {
 			$table->timestamps();
 			$table->softDeletes();
 			
-			// foreign keys
-			$table->foreign('start_id')
-				->references('id')
-				->on('cities');
-			
-			$table->foreign('end_id')
+			$table->foreign('city_id')
 				->references('id')
 				->on('cities');
 			
@@ -63,7 +51,7 @@ class CreateOffersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('offers');
+		Schema::drop('listings');
 	}
 
 }
