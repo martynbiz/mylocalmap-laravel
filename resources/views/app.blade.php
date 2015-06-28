@@ -40,7 +40,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="{{ url('/') }}">
+						<a href="{{ url('offers/create') }}">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 							Offer a lift
 						</a>

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateOffersTable extends Migration {
+class CreateOfferPartsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,7 +12,7 @@ class CreateOffersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('offers', function(Blueprint $table)
+		Schema::create('offer_parts', function(Blueprint $table)
 		{
 			$table->increments('id');
 			
@@ -33,7 +33,7 @@ class CreateOffersTable extends Migration {
 			$table->integer('seats_total');
 			$table->integer('seats_available');
 			
-			$table->integer('user_id')
+			$table->integer('offer_id')
 				->unsigned()
 				->index();
 			
@@ -50,9 +50,9 @@ class CreateOffersTable extends Migration {
 				->references('id')
 				->on('cities');
 			
-			$table->foreign('user_id')
+			$table->foreign('offer_id')
 				->references('id')
-				->on('users');
+				->on('offers');
 		});
 	}
 
@@ -63,7 +63,7 @@ class CreateOffersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('offers');
+		Schema::drop('offer_parts');
 	}
 
 }

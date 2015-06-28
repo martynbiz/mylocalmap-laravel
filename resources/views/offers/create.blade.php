@@ -1,15 +1,9 @@
 @extends('app')
 
 @section('content')
-    <ol class="breadcrumb">
-        <li><a href="{{ url('/home') }}">Home</a></li>
-        <li><a href="{{ url('/offers') }}">Offers</a></li>
-        <li class="active">Create</li>
-    </ol>
+	@include ('partials.errors')
     
     {!! Form::open(['action' => 'OffersController@store', 'method' => 'POST']) !!}
-        @include ('offers.partials.form', ['btnText' => 'Submit offer'])
+        @include ('offers.partials.form', ['btnText' => 'Offer lift'])
     {!! Form::close() !!}
-    
-    @include ('partials.errors')
 @stop

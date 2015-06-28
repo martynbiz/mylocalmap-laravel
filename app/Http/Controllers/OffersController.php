@@ -2,6 +2,7 @@
 
 // libraries
 use Illuminate\Auth\AuthManager;
+use App\Library\SelectOptions;
 
 // models
 use App\Offer;
@@ -52,11 +53,13 @@ class OffersController extends Controller {
 	 */
 	public function create()
 	{
-		// we need an empty offer for the form
-        $offer = new Offer;
+		// generate regions/cities array
+		$cityOptions = SelectOptions::cities();
+		$hourOptions = SelectOptions::hours();
+		$minuteOptions = SelectOptions::minutes();
         
         // render the view script, or json if ajax request
-        return $this->render('offers.create');
+        return $this->render('offers.create', compact('cityOptions', 'hourOptions', 'minuteOptions'));
 	}
 
 	/**
@@ -68,13 +71,6 @@ class OffersController extends Controller {
 	{
 		// save offer
         $offer = $auth->user()->offers()->create( $request->all() );
-        
-        // save tags
-        if ($request->input('tags')) {
-            foreach($request->input('tags') as $tagId) {
-                $offer->tags()->attach($tagId);
-            }
-        }
         
         // redirect
         return redirect()->to('offers')->with([

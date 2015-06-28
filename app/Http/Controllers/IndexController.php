@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use App\Library\SelectOptions;
+
 // models
 use App\City;
 use App\Region;
@@ -32,24 +34,13 @@ class IndexController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Region $region)
+	public function index()
 	{
 		// generate regions/cities array
-		$citiesArray = array();
-		
-		$regions = $region
-			->with(array('cities' => function ($city) {
-				$city->orderBy('name');
-			}))
-			->orderBy('name')
-			->get();
-		
-		foreach ($regions as $region) {
-			$citiesArray[$region->name] = $region->cities->lists('name', 'id');
-		}
+		$cityOptions = SelectOptions::cities();
         
         // render the view script, or json if ajax request
-        return $this->render('index.index', compact('offers', 'citiesArray'));
+        return $this->render('index.index', compact('offers', 'cityOptions'));
 	}
 
 }

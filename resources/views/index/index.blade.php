@@ -11,7 +11,7 @@
 				<div class="panel-body">
 					
 					{!! Form::open(['action' => 'OffersController@index', 'method' => 'POST']) !!}
-				        @include ('index.partials.search_form', ['citiesArray' => $citiesArray])
+				        @include ('index.partials.search_form')
 				    {!! Form::close() !!}
 					
 				</div>
