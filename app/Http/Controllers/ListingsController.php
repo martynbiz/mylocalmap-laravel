@@ -5,26 +5,25 @@ use Illuminate\Auth\AuthManager;
 use App\Library\SelectOptions;
 
 // models
-use App\Offer;
-use App\City;
+use App\Listing;
 
 // requests
-use App\Http\Requests\OfferRequest;
+use App\Http\Requests\ListingRequest;
 
-class OffersController extends Controller {
+class ListingsController extends Controller {
     
 	/**
-     * @var App\Offer $offer The model for this controller
+     * @var App\Listing $listing The model for this controller
      */
-    protected $offer;
+    protected $listing;
     
     /**
      * 
      */
-    public function __construct(Offer $offer)
+    public function __construct(Listing $listing)
     {
         // set our controller's model
-        $this->offer = $offer;
+        $this->listing = $listing;
         
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -35,15 +34,13 @@ class OffersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(City $city)
+	public function index()
 	{
         // will throw an exception if not found
-        $offers = $this->offer->all();
-        
-        $cities = $city->all();
+        $listings = $this->listing->all();
         
         // render the view script, or json if ajax request
-        return $this->render('offers.index', compact('offers', 'cities'));
+        return $this->render('listings.index', compact('listings', 'cities'));
 	}
 
 	/**
@@ -55,11 +52,9 @@ class OffersController extends Controller {
 	{
 		// generate regions/cities array
 		$cityOptions = SelectOptions::cities();
-		$hourOptions = SelectOptions::hours();
-		$minuteOptions = SelectOptions::minutes();
         
         // render the view script, or json if ajax request
-        return $this->render('offers.create', compact('cityOptions', 'hourOptions', 'minuteOptions'));
+        return $this->render('listings.create', compact('cityOptions', 'hourOptions', 'minuteOptions'));
 	}
 
 	/**
@@ -67,14 +62,14 @@ class OffersController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AuthManager $auth, OfferRequest $request)
+	public function store(AuthManager $auth, ListingRequest $request)
 	{
-		// save offer
-        $offer = $auth->user()->offers()->create( $request->all() );
+		// save listing
+        $listing = $auth->user()->listings()->create( $request->all() );
         
         // redirect
-        return redirect()->to('offers')->with([
-            'flash_message' => 'A new offer has been created',
+        return redirect()->to('listings')->with([
+            'flash_message' => 'A new listing has been created',
         ]);
 	}
 
@@ -86,11 +81,11 @@ class OffersController extends Controller {
 	 */
 	public function show($id, AuthManager $auth, Utils $utils)
 	{
-		$offer = $this->offer
+		$listing = $this->listing
             ->findOrFail($id);
         
         // render the view script, or json if ajax request
-        return $this->render('offers.show', compact('offer'));
+        return $this->render('listings.show', compact('listing'));
 	}
 
 	/**
@@ -102,10 +97,10 @@ class OffersController extends Controller {
 	public function edit(AuthManager $auth, $id)
 	{
 		// will throw an exception if not found
-        $offer = $auth->user()->offers()->findOrFail($id);
+        $listing = $auth->user()->listings()->findOrFail($id);
         
         // render the view script, or json if ajax request
-        return $this->render('offers.edit', compact('offer'));
+        return $this->render('listings.edit', compact('listing'));
 	}
 
 	/**
@@ -114,16 +109,16 @@ class OffersController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(AuthManager $auth, OfferRequest $request, $id)
+	public function update(AuthManager $auth, ListingRequest $request, $id)
 	{
 		// will throw an exception if not found
-        $offer = $auth->user()->offers()->findOrFail($id);
+        $listing = $auth->user()->listings()->findOrFail($id);
         
-        // update the offer with the request params
-        $offer->update( $request->all() );
+        // update the listing with the request params
+        $listing->update( $request->all() );
         
-        return redirect()->route('offers.show', [$id])->with([
-            'flash_message' => 'Offer has been updated',
+        return redirect()->route('listings.show', [$id])->with([
+            'flash_message' => 'Listing has been updated',
         ]);
 	}
 
@@ -135,13 +130,13 @@ class OffersController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$offer = $this->offer->findOrFail($id);
+		$listing = $this->listing->findOrFail($id);
         
         // will throw an exception if not found
-        $offer->delete();
+        $listing->delete();
         
-        return redirect()->to('offers')->with([
-            'flash_message' => 'Offer has been deleted',
+        return redirect()->to('listings')->with([
+            'flash_message' => 'Listing has been deleted',
         ]);
 	}
 }

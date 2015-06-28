@@ -18,4 +18,4 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 
-Route::resource('offers', 'OffersController');
+Route::resource('listings', 'ListingsController');

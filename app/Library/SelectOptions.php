@@ -33,13 +33,18 @@ class SelectOptions
     
     /**
      * Get cities and regions array for select
+     * @param string $emptyOption Set to what the first empty option should be
      */
-    public static function cities()
+    public static function cities($emptyOption=true)
     {
         // generate regions/cities array
-        $citiesArray = array(
-            '0' => 'Please select'
-        );
+        if ($emptyOption) {
+	        
+	        // set empty option to the passed string, otherwise use default
+	        $cities = array(
+	            '0' => (is_string($emptyOption)) ? $emptyOption : 'Please select',
+	        );
+        }
         
         $regions = Region::with(array('cities' => function ($city) {
                 $city->orderBy('name');
@@ -48,9 +53,9 @@ class SelectOptions
             ->get();
         
         foreach ($regions as $region) {
-            $citiesArray[$region->name] = $region->cities->lists('name', 'id');
+            $cities[$region->name] = $region->cities->lists('name', 'name');
         }
         
-        return $citiesArray;
+        return $cities;
     }
 }

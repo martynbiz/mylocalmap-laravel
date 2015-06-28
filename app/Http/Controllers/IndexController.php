@@ -37,7 +37,7 @@ class IndexController extends Controller {
 	public function index()
 	{
 		// generate regions/cities array
-		$cityOptions = SelectOptions::cities();
+		$cityOptions = SelectOptions::cities('Jump to...');
         
         // render the view script, or json if ajax request
         return $this->render('index.index', compact('offers', 'cityOptions'));

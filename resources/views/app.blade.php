@@ -18,7 +18,7 @@
 		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 	<![endif]-->
 </head>
-<body>
+<body onload="initialize();">
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -28,21 +28,18 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Liftshare</a>
+				<a class="navbar-brand" href="#">
+					<span class="glyphicon glyphicon-tree-deciduous"></span>
+					My Local Map
+				</a>
 			</div>
 
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="{{ url('/') }}">
-							<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-							Home
-						</a>
-					</li>
-					<li>
 						<a href="{{ url('offers/create') }}">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-							Offer a lift
+							Add shop
 						</a>
 					</li>
 				</ul>
@@ -72,7 +69,7 @@
 		</div>
 	</nav>
 	
-	<div class="container">
+	<div class="" style="position: relative;">
 		@include('partials.flash')
 			
 		@yield('content')
