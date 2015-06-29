@@ -17,9 +17,14 @@
 			<ul class="nav navbar-nav">
 				<li>
 					<a href="{{ url('about') }}">
-						About us
+						About
 					</a>
 				</li>
+					<li>
+						<a href="{{ url('listings/create') }}">
+							Add listing
+						</a>
+					</li>
 			</ul>
 
 			<ul class="nav navbar-nav navbar-right">

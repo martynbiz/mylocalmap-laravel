@@ -5,27 +5,29 @@ use Illuminate\Auth\AuthManager;
 use App\Library\SelectOptions;
 
 // models
-use App\Listing;
-use App\City;
+use MongoClient;
+use MongoId;
+use App\City; //**put this into mongodb, seed?
 
 // requests
 use App\Http\Requests\ListingRequest;
 
 class ListingsController extends Controller {
-    
+
 	/**
      * @var App\Listing $listing The model for this controller
      */
     protected $listing;
-    
+
     /**
-     * 
+     *
      */
-    public function __construct(Listing $listing)
+    public function __construct()
     {
         // set our controller's model
-        $this->listing = $listing;
-        
+        $conn = new MongoClient();
+        $this->listings = $conn->selectDB( env('MONGO_DB') )->listings;
+
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
@@ -41,6 +43,20 @@ class ListingsController extends Controller {
         return $this->render('listings.index');
 	}
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return Response
+     */
+    public function show($id)
+    {
+        $listing = $this->listings->findOne(array('_id' => new MongoId($id)));
+        
+        // render the view script, or json if ajax request
+        return $this->render('listings.show', compact('listing'));
+    }
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -50,7 +66,7 @@ class ListingsController extends Controller {
 	{
 		// generate regions/cities array
 		$cityOptions = SelectOptions::cities();
-        
+
         // render the view script, or json if ajax request
         return $this->render('listings.create', compact('cityOptions'));
 	}
@@ -64,17 +80,17 @@ class ListingsController extends Controller {
 	{
 		// fetch the geocodes for this address
 		$city = $c->findOrFail( $request->get('city_id') );
-		$fullAddress = $request->get('address') . ', ' . 
+		$fullAddress = $request->get('address') . ', ' .
 			$city->name . ', United Kingdom';
-		
+
 		$curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
 		$geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-		
+
 		// fetch the address
 		$geos = $geocoder
 			->limit(1)
 			->geocode($fullAddress);
-		
+
 		// add lat/lng to request params
 		if ( $geos->count() ) {
 			$values = array_merge($request->input(), [
@@ -82,29 +98,14 @@ class ListingsController extends Controller {
 				'lng' => $geos->first()->getLongitude(),
 			]);
 		}
-		
+
 		// save listing with $values
-        $listing = $auth->user()->listings()->create( $values );
-        
+        $this->listings->insert($values);
+
         // redirect
         return redirect()->to('listings')->with([
             'flash_message' => 'A new listing has been created',
         ]);
-	}
-
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id, AuthManager $auth, Utils $utils)
-	{
-		$listing = $this->listing
-            ->findOrFail($id);
-        
-        // render the view script, or json if ajax request
-        return $this->render('listings.show', compact('listing'));
 	}
 
 	/**
@@ -117,7 +118,7 @@ class ListingsController extends Controller {
 	{
 		// will throw an exception if not found
         $listing = $auth->user()->listings()->findOrFail($id);
-        
+
         // render the view script, or json if ajax request
         return $this->render('listings.edit', compact('listing'));
 	}
@@ -132,10 +133,10 @@ class ListingsController extends Controller {
 	{
 		// will throw an exception if not found
         $listing = $auth->user()->listings()->findOrFail($id);
-        
+
         // update the listing with the request params
         $listing->update( $request->all() );
-        
+
         return redirect()->route('listings.show', [$id])->with([
             'flash_message' => 'Listing has been updated',
         ]);
@@ -150,10 +151,10 @@ class ListingsController extends Controller {
 	public function destroy($id)
 	{
 		$listing = $this->listing->findOrFail($id);
-        
+
         // will throw an exception if not found
         $listing->delete();
-        
+
         return redirect()->to('listings')->with([
             'flash_message' => 'Listing has been deleted',
         ]);

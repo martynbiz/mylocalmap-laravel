@@ -7,10 +7,9 @@
         <div class="panel-body">
             <div class="form-group">
                 {!! Form::label('start_id', 'Go to:', ['class' => 'control-label sr-only']) !!}
-                {!! Form::select('start_id', $cityOptions, null, ['name'=>'start_id[]', 'class' => 'form-control']) !!}
-                
+                {!! Form::select('start_id', $cityOptions, null, ['class' => 'form-control']) !!}
             </div>
-            
+
             <div class="col-md-6">
                 {!! Form::checkbox('butchers') !!}
                 {!! Form::label('butchers', 'Butcher') !!}
@@ -39,28 +38,28 @@
                 {!! Form::checkbox('butchers') !!}
                 {!! Form::label('butchers', 'Farmers\' Markets') !!}
             </div>
-            
+
             <div class="col-md-12">
 	            <hr>
 	        </div>
-	        
+
             <div class="col-md-6">
                 {!! Form::checkbox('butchers') !!}
                 {!! Form::label('butchers', 'Clothing') !!}
             </div>
-            
+
             <div class="col-md-12">
 	            <hr>
 	        </div>
-	        
+
             <div class="col-md-6">
                 {!! Form::checkbox('butchers') !!}
                 {!! Form::label('butchers', 'Second hand') !!}
             </div>
-	        
+
         </div>
     </div>
-    
+
    {{--  <div class="list-group">
         <a href="#" class="list-group-item">
             <h4 class="list-group-item-heading">
@@ -90,7 +89,7 @@
             <p class="list-group-item-text">Local grocerie and bakery shop.</p>
         </a>
     </div> --}}
-    
+
 </div>
 </div>{{-- can't figure why this <div> is needed, maps doesn't load otherwise --}}
 
@@ -103,7 +102,7 @@
 <script type="text/javascript">
 
 function initialize() {
-	
+
 	// var json = [
 	//   {
 	//     "title": "Stockholm",
@@ -124,17 +123,17 @@ function initialize() {
 	//     "description": "Copenhagen is the capital of Denmark and its most populous city, with a metropolitan population of 1,931,467 (as of 1 January 2012)."
 	//   }
 	// ];
-	
+
 	// var map = new google.maps.Map(document.getElementById("map"), {
 	// 	center: new google.maps.LatLng(57.9, 14.6),
 	// 	zoom: 6,
 	// 	mapTypeId: google.maps.MapTypeId.ROADMAP
 	// });
-	
+
 	// for (var i = 0, length = json.length; i < length; i++) {
 	//   var data = json[i],
-	//       latLng = new google.maps.LatLng(data.lat, data.lng); 
-	     
+	//       latLng = new google.maps.LatLng(data.lat, data.lng);
+
 	//   // Creating a marker and putting it on the map
 	//   var marker = new google.maps.Marker({
 	//     position: latLng,
