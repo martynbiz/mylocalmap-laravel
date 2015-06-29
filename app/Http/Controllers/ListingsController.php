@@ -6,6 +6,7 @@ use App\Library\SelectOptions;
 
 // models
 use App\Listing;
+use App\City;
 
 // requests
 use App\Http\Requests\ListingRequest;
@@ -36,11 +37,8 @@ class ListingsController extends Controller {
 	 */
 	public function index()
 	{
-        // will throw an exception if not found
-        $listings = $this->listing->all();
-        
         // render the view script, or json if ajax request
-        return $this->render('listings.index', compact('listings', 'cities'));
+        return $this->render('listings.index');
 	}
 
 	/**
@@ -62,10 +60,31 @@ class ListingsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AuthManager $auth, ListingRequest $request)
+	public function store(AuthManager $auth, ListingRequest $request, City $c)
 	{
-		// save listing
-        $listing = $auth->user()->listings()->create( $request->all() );
+		// fetch the geocodes for this address
+		$city = $c->findOrFail( $request->get('city_id') );
+		$fullAddress = $request->get('address') . ', ' . 
+			$city->name . ', United Kingdom';
+		
+		$curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+		$geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+		
+		// fetch the address
+		$geos = $geocoder
+			->limit(1)
+			->geocode($fullAddress);
+		
+		// add lat/lng to request params
+		if ( $geos->count() ) {
+			$values = array_merge($request->input(), [
+				'lat' => $geos->first()->getLatitude(),
+				'lng' => $geos->first()->getLongitude(),
+			]);
+		}
+		
+		// save listing with $values
+        $listing = $auth->user()->listings()->create( $values );
         
         // redirect
         return redirect()->to('listings')->with([

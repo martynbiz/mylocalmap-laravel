@@ -9,6 +9,7 @@ TODO:
 CREATE LISTING:
 - look up lat/lng
 - redirect to..?
+- tags
 
 
 Jump to.. jump to location
@@ -25,6 +26,12 @@ http://fronteed.com/iCheck/
 TESTING
 - *_testing database
 - mock auth
+
+
+Enhancement - mongodb, heavy use of tags?
+
+
+
 
 
 
