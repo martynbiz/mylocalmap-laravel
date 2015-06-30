@@ -8,21 +8,55 @@ class DB
     /**
      *
      */
-    public function __construct()
-    {
+    protected $db;
 
-    }
+    /**
+     * The collection for the extending class
+     */
+     protected $col;
+
+     /**
+      *
+      */
+     public function __construct(MongoClient $conn, $dbname)
+     {
+         // if $collection is not set, throw exception
+         if (!isset($this->collection))
+            throw new \Exception('Collection name not set');
+
+         // set the collection name
+         $collectionName = $this->collection;
+
+         $this->db = $conn->selectDB($dbname);
+         $this->col = $this->db->$collectionName;
+     }
+
+     /**
+      *
+      */
+     public function insert($values)
+     {
+         // protect against mass assignment
+         if (!isset($this->fillable) or !is_array($this->fillable))
+            throw new \Exception('Fillable array not set.');
+         $values = array_intersect_key($values, array_flip($this->fillable));
+         
+         // set sequence first before insert
+         $seq = $this->getNextSequence( $this->col->getName() );
+         $values = array_merge( array(
+             '_id' => $seq,
+         ), $values);
+
+         // do the insert
+         $this->col->insert($values);
+     }
 
     /**
      * Get the next in sequence number
      */
-    static public function getNextSequence($name)
+    public function getNextSequence($name)
     {
-        // set our controller's model
-        $client = new MongoClient();
-        $db = $client->selectDB( env('MONGO_DB') );
-
-        $ret = $db->counters->findAndModify(
+        $ret = $this->db->counters->findAndModify(
             array( '_id' => $name),
             array('$inc' => array('seq' => 1)),
             array(),

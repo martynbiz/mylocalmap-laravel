@@ -1,8 +1,16 @@
 <?php namespace App;
 
-class Listing extends Model {
+use App\Library\Mongo\DB;
+use MongoClient;
 
-	/**
+class Listing extends DB {
+
+    /**
+     * Collection name
+     */
+    protected $collection = 'listings';
+
+    /**
      * Protect against mass assignment
      */
     protected $fillable = [
@@ -14,23 +22,4 @@ class Listing extends Model {
         'lat',
         'lng',
     ];
-    
-    /**
-    * Listing belongs to city
-    * @return \Illuminte\Database\Eloquent\Relations\belongsTo
-    */    
-    public function city()
-    {
-        return $this->belongsTo('App\City');
-    }
-    
-    /**
-    * Listing belongs to user
-    * @return \Illuminte\Database\Eloquent\Relations\belongsTo
-    */    
-    public function user()
-    {
-        return $this->belongsTo('App\User');
-    }
-
 }

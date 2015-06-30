@@ -9,7 +9,7 @@ use App\Library\Mongo\DB as MongoDB;
 // models
 use MongoClient;
 use MongoId;
-use App\City; //**put this into mongodb, seed?
+use App\Listing; //**put this into mongodb, seed?
 
 // requests
 use Request;
@@ -20,16 +20,18 @@ class ListingsController extends Controller {
 	/**
      * @var App\Listing $listing The model for this controller
      */
-    protected $listing;
+    protected $listings;
 
     /**
      *
      */
     public function __construct()
     {
-        // set our controller's model
-        $conn = new MongoClient();
-        $this->listings = $conn->selectDB( env('MONGO_DB') )->listings;
+        $this->listings = new Listing( new MongoClient(), env('MONGO_DB') );
+
+        // // set our controller's model
+        // $conn = new MongoClient();
+        // $this->listings = $conn->selectDB( env('MONGO_DB') )->listings;
 
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -96,7 +98,7 @@ class ListingsController extends Controller {
 		$geos = $geocoder
 			->limit(1)
 			->geocode($fullAddress);
-        
+
         if ( $geos->count() ) {
             $values = array_merge($values, [
                 'lat' => $geos->first()->getLatitude(),
@@ -105,30 +107,30 @@ class ListingsController extends Controller {
         }
 
 
-		// *****mongodb
-
+		// // *****mongodb
         //
-        $fillable = array(
-            'name',
-            'description_short',
-            'description_long',
-            'address',
-            // 'city_id',
-            'lat',
-            'lng',
-        );
-
-        $values = array_intersect_key($values, array_flip($fillable));
-
-		// save listing with $values
-        $seq = MongoDB::getNextSequence('listings');
-        $values = array_merge( array(
-            '_id' => $seq,
-        ), $values);
+        // //
+        // $fillable = array(
+        //     'name',
+        //     'description_short',
+        //     'description_long',
+        //     'address',
+        //     // 'city_id',
+        //     'lat',
+        //     'lng',
+        // );
+        //
+        // $values = array_intersect_key($values, array_flip($fillable));
+        //
+		// // save listing with $values
+        // $seq = MongoDB::getNextSequence('listings');
+        // $values = array_merge( array(
+        //     '_id' => $seq,
+        // ), $values);
 
         $this->listings->insert($values);
         // *****
-
+        dd($values);
         // redirect
         return redirect()->to('listings')->with([
             'flash_message' => 'A new listing has been created',

@@ -27,6 +27,10 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
+Sequences in Mongo
+
+Regions/ cities in Mongo
+
 Tags in mongodb
 
 Acl - reported error
