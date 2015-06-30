@@ -25,7 +25,7 @@ class ListingRequest extends Request {
 			'name' => 'required|min:3',
 			'description_short' => 'required|min:3',
 			'address' => 'required|min:3',
-			'city_id' => 'required',
+			// 'city_id' => 'required',
 		];
 	}
 

@@ -27,6 +27,8 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
+Tags in mongodb
+
 Acl - reported error
 https://github.com/kodeine/laravel-acl/issues/28
 
@@ -49,10 +51,16 @@ TESTING
 - mock auth
 
 
-Enhancement - mongodb, heavy use of tags?
+Enhancement
+- mongodb, heavy use of tags?
+- time to put mongo into n odm? or no?
 
 
 
+
+
+flaws with atom:
+- when i rename an open file, it closes that file (do like sublime)
 
 
 

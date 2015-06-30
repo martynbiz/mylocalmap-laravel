@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a2f009fac3b32b2265b9dfe53e117c62",
+    "hash": "36442beeb210df43763e33d80f2d7f8c",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1054,6 +1054,57 @@
             "time": "2015-04-13 16:50:21"
         },
         {
+            "name": "proai/laravel-handlebars",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ProAI/laravel-handlebars.git",
+                "reference": "418f9bdc3eba0e84c4df1b97861e89d1824ce915"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ProAI/laravel-handlebars/zipball/418f9bdc3eba0e84c4df1b97861e89d1824ce915",
+                "reference": "418f9bdc3eba0e84c4df1b97861e89d1824ce915",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/view": "5.*",
+                "php": ">=5.4.0",
+                "zordius/lightncandy": "0.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ProAI\\Handlebars\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Markus J. Wetzel",
+                    "email": "markuswetzel@gmx.net"
+                }
+            ],
+            "description": "A Laravel 5 wrapper for LightnCandy for using the Handlebars (and Mustache) template engine.",
+            "homepage": "http://github.com/proai/laravel-handlebars",
+            "keywords": [
+                "handlebars",
+                "laravel",
+                "lightncandy",
+                "mustache",
+                "template engine"
+            ],
+            "time": "2015-06-21 18:04:18"
+        },
+        {
             "name": "psr/http-message",
             "version": "0.9.2",
             "source": {
@@ -2076,6 +2127,53 @@
                 "geoip"
             ],
             "time": "2015-04-20 09:50:36"
+        },
+        {
+            "name": "zordius/lightncandy",
+            "version": "v0.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zordius/lightncandy.git",
+                "reference": "015fed62d0ae6fe7601d3910b8e4b6a6964f86a0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zordius/lightncandy/zipball/015fed62d0ae6fe7601d3910b8e4b6a6964f86a0",
+                "reference": "015fed62d0ae6fe7601d3910b8e4b6a6964f86a0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.0.17"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/lightncandy.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Zordius Chen",
+                    "email": "zordius@yahoo-inc.com"
+                }
+            ],
+            "description": "An extremely fast PHP implementation of handlebars ( http://handlebarsjs.com/ ) and mustache ( http://mustache.github.io/ ).",
+            "homepage": "https://github.com/zordius/lightncandy",
+            "keywords": [
+                "handlebars",
+                "logicless",
+                "mustache",
+                "php",
+                "template"
+            ],
+            "time": "2015-05-08 01:56:46"
         }
     ],
     "packages-dev": [

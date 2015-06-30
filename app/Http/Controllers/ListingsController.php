@@ -4,12 +4,15 @@
 use Illuminate\Auth\AuthManager;
 use App\Library\SelectOptions;
 
+use App\Library\Mongo\DB as MongoDB;
+
 // models
 use MongoClient;
 use MongoId;
 use App\City; //**put this into mongodb, seed?
 
 // requests
+use Request;
 use App\Http\Requests\ListingRequest;
 
 class ListingsController extends Controller {
@@ -52,7 +55,7 @@ class ListingsController extends Controller {
     public function show($id)
     {
         $listing = $this->listings->findOne(array('_id' => new MongoId($id)));
-        
+
         // render the view script, or json if ajax request
         return $this->render('listings.show', compact('listing'));
     }
@@ -64,11 +67,11 @@ class ListingsController extends Controller {
 	 */
 	public function create()
 	{
-		// generate regions/cities array
-		$cityOptions = SelectOptions::cities();
+		// pick up old POST values if redirect (error)
+        $listing = Request::old();
 
         // render the view script, or json if ajax request
-        return $this->render('listings.create', compact('cityOptions'));
+        return $this->render('listings.create', compact('listing', 'cityOptions'));
 	}
 
 	/**
@@ -76,13 +79,16 @@ class ListingsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(AuthManager $auth, ListingRequest $request, City $c)
+	public function store(AuthManager $auth, ListingRequest $request)
 	{
-		// fetch the geocodes for this address
-		$city = $c->findOrFail( $request->get('city_id') );
-		$fullAddress = $request->get('address') . ', ' .
-			$city->name . ', United Kingdom';
+		$values = $request->input();
 
+
+        // fetch the geocodes for this address
+		// $city = $c->findOrFail( $request->get('city_id') );
+		$fullAddress = $values['address'] . ', United Kingdom';
+
+        // **use... put this in protected property (update will use)
 		$curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
 		$geocoder = new \Geocoder\Provider\GoogleMaps($curl);
 
@@ -90,17 +96,38 @@ class ListingsController extends Controller {
 		$geos = $geocoder
 			->limit(1)
 			->geocode($fullAddress);
+        
+        if ( $geos->count() ) {
+            $values = array_merge($values, [
+                'lat' => $geos->first()->getLatitude(),
+                'lng' => $geos->first()->getLongitude(),
+            ]);
+        }
 
-		// add lat/lng to request params
-		if ( $geos->count() ) {
-			$values = array_merge($request->input(), [
-				'lat' => $geos->first()->getLatitude(),
-				'lng' => $geos->first()->getLongitude(),
-			]);
-		}
+
+		// *****mongodb
+
+        //
+        $fillable = array(
+            'name',
+            'description_short',
+            'description_long',
+            'address',
+            // 'city_id',
+            'lat',
+            'lng',
+        );
+
+        $values = array_intersect_key($values, array_flip($fillable));
 
 		// save listing with $values
+        $seq = MongoDB::getNextSequence('listings');
+        $values = array_merge( array(
+            '_id' => $seq,
+        ), $values);
+
         $this->listings->insert($values);
+        // *****
 
         // redirect
         return redirect()->to('listings')->with([

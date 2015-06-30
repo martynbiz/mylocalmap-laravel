@@ -14,10 +14,10 @@ class SelectOptions
 		array_walk($hours, function(&$value) {
 			$value = sprintf('%02d', $value);
 		});
-		
+
 		return $hours;
 	}
-	
+
 	/**
 	 * Get an array of hour strings (00..23)
 	 */
@@ -27,35 +27,40 @@ class SelectOptions
 		array_walk($minutes, function(&$value) {
 			$value = sprintf('%02d', $value);
 		});
-		
+
 		return $minutes;
 	}
-    
+
     /**
      * Get cities and regions array for select
-     * @param string $emptyOption Set to what the first empty option should be
+     * @param array $options
      */
-    public static function cities($emptyOption=true)
+    public static function cities($options=[])
     {
-        // generate regions/cities array
-        if ($emptyOption) {
-	        
-	        // set empty option to the passed string, otherwise use default
-	        $cities = array(
-	            '0' => (is_string($emptyOption)) ? $emptyOption : 'Please select',
-	        );
-        }
-        
+        // default options
+		$options = array_merge([
+			'emptyFirst' => 'Please select',
+		], $options);
+
+		// // generate regions/cities array
+        // if ($options['emptyFirst']) {
+	    //
+	    //     // set empty option to the passed string, otherwise use default
+	    //     $cities = array(
+	    //         '0' => (is_string($options['emptyFirst'])) ? $options['emptyFirst'] : 'Please select',
+	    //     );
+        // }
+
         $regions = Region::with(array('cities' => function ($city) {
                 $city->orderBy('name');
             }))
             ->orderBy('name')
             ->get();
-        
+
         foreach ($regions as $region) {
             $cities[$region->name] = $region->cities->lists('name', 'id');
         }
-        
+
         return $cities;
     }
 }

@@ -1,0 +1,42 @@
+
+
+<form method="POST" action="/listings" accept-charset="UTF-8"><input name="_token" type="hidden" value="xQ0LY3jBQUEvXSrjj8dgBc7zf7hDNNZtS0JK3N5a">
+    <ol class="breadcrumb">
+        <li><a href="http://localhost:8000">Home</a></li>
+        <li class="active">Add listing</li>
+    </ol>
+
+    <div class="well col-md-12">
+        <div class="form-group">
+            <label for="name" class="col-md-2">Name</label>
+            <div class="col-md-10">
+                <input value="{{ listing.name }}" class="form-control" placeholder="Ex. Queens Park Farmers&#039;s Market" name="name" type="text" id="name">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description_short" class="col-md-2">Short description</label>
+            <div class="col-md-10">
+                <input value="{{ listing.description_short }}" class="form-control" length="64" placeholder="Ex. Wide range of local produce from farmers in the Glasgow area." name="description_short" type="text" id="description_short">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description_long" class="col-md-2">Long description (optional)</label>
+            <div class="col-md-10">
+                <textarea class="form-control" rows="4" name="description_long" cols="50" id="description_long"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="well col-md-12">
+        <div class="form-group">
+            <label for="address" class="col-md-2">Address</label>
+            <div class="col-md-10">
+                <input value="{{ listing.address }}" class="form-control" placeholder="Ex. 123 Victoria Road, Queens Park" name="address" type="text" id="address">
+            </div>
+        </div>
+    </div>
+
+    <input class="btn btn-primary form-control" type="submit" value="Add listing">
+</form>
