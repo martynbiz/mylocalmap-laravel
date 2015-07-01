@@ -27,33 +27,45 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
-Sequences in Mongo
+Handlebars
+- ensure works for homepages, crud ops, 
+- how to handle partials?
 
-Regions/ cities in Mongo
+MongoDB
+- Regions/ cities in Mongo, Jump to.. (geos in data-*)
+- Tags in mongodb
 
-Tags in mongodb
+ACL
+- use isAdmin/ isModerator etc for now
 
 Acl - reported error
 https://github.com/kodeine/laravel-acl/issues/28
-
-CREATE LISTING:
-- redirect to..? - view
-- tags
-
-
-Jump to.. jump to location (add data-lat and data-lng, and data-zoom?)
-
-MongoDB as it will handle tags much much better
 
 MAP (google maps api, clustering, ui filters)
 Filters - Food: supermarkets, farmers' market, butchers, greengrocers, bakery, fish mongers, coffee shops, alchohol; co-operatives, indy record shops, second hand ; clothing,
 On change: reload data
 http://fronteed.com/iCheck/
 
+VOTES
+COMMENTS
+
+
+
+
+V2
+
+USERS (MongoDB)
+- move to mongo - create new authentication classes, middleware, etc
+- acl - users, user_roles, user_permissions
+- seeding
+
+JAVASCRIPT
+- load templates via JS
+- 
+
 TESTING
 - *_testing database
 - mock auth
-
 
 Enhancement
 - mongodb, heavy use of tags?
