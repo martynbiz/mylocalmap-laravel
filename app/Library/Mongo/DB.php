@@ -40,16 +40,28 @@ class DB
          if (!isset($this->fillable) or !is_array($this->fillable))
             throw new \Exception('Fillable array not set.');
          $values = array_intersect_key($values, array_flip($this->fillable));
-         
-         // set sequence first before insert
-         $seq = $this->getNextSequence( $this->col->getName() );
-         $values = array_merge( array(
-             '_id' => $seq,
-         ), $values);
+
+         // only if _id is not set, we'll use sequence
+         if (!isset($values['_id'])) {
+             $seq = $this->getNextSequence( $this->col->getName() );
+             $values = array_merge( array(
+                 '_id' => $seq,
+             ), $values);
+         }
 
          // do the insert
          $this->col->insert($values);
      }
+
+     /**
+      *
+      */
+      function find($query=[])
+      {
+          $cursor = $this->col->find($query);
+
+          return iterator_to_array($cursor);
+      }
 
     /**
      * Get the next in sequence number

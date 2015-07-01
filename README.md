@@ -27,8 +27,11 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
+Bootstrap
+- move classes (e.g. col-md-4) as mixins
+
 Handlebars
-- ensure works for homepages, crud ops, 
+- ensure works for homepages, crud ops,
 - how to handle partials?
 
 MongoDB
@@ -61,7 +64,7 @@ USERS (MongoDB)
 
 JAVASCRIPT
 - load templates via JS
-- 
+-
 
 TESTING
 - *_testing database

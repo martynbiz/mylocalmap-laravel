@@ -18,7 +18,7 @@ class Listing extends DB {
         'description_short',
         'description_long',
         'address',
-        'city_id',
+        // 'city',
         'lat',
         'lng',
     ];

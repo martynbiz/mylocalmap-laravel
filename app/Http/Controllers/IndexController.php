@@ -3,8 +3,11 @@
 use App\Library\SelectOptions;
 
 // models
-use App\City;
+use MongoClient;
+use MongoId;
 use App\Region;
+use App\Group;
+use App\City;
 
 class IndexController extends Controller {
 
@@ -26,7 +29,8 @@ class IndexController extends Controller {
 	 */
 	public function __construct()
 	{
-		
+		$this->regions = new Region( new MongoClient(), env('MONGO_DB') );
+		$this->groups = new Group( new MongoClient(), env('MONGO_DB') );
 	}
 
 	// public function index()
@@ -37,11 +41,40 @@ class IndexController extends Controller {
 
 	public function index()
 	{
-		// generate regions/cities array
-		$cityOptions = SelectOptions::cities('Jump to...');
-        
+		// // generate regions/cities array
+		// $cityOptions = SelectOptions::cities();
+		//
+		// $regions = array();
+		// foreach($cityOptions as $region => $cities) {
+		//
+		// 	$newRegion = array(
+		// 		'_id' => \App\Library\Utils::slugify($region),
+		// 		'name' => $region,
+		// 		'slug' => \App\Library\Utils::slugify($region),
+		// 		'cities' => array(),
+		// 	);
+		//
+		// 	$newCities = array();
+		// 	foreach($cities as $id => $city) {
+		// 		array_push($newRegion['cities'], array(
+		// 			'_id' => \App\Library\Utils::slugify($city['name']),
+		// 			'name' => $city['name'],
+		// 			'slug' => \App\Library\Utils::slugify($city['name']),
+		// 			'lat' => $city['lat'],
+		// 			'lng' => $city['lng'],
+		// 		));
+		// 	}
+		// 	// dd($newCities);
+		// 	array_push($regions, $newRegion);
+		// }
+		//
+		// var_export($regions); exit;
+
+		$regions = $this->regions->find();
+		$groups = $this->groups->find();
+
         // render the view script, or json if ajax request
-        return $this->render('index.index', compact('cityOptions'));
+        return $this->render('index.index', compact('regions', 'groups'));
 	}
 
 }

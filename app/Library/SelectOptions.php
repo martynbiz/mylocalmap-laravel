@@ -57,10 +57,26 @@ class SelectOptions
             ->orderBy('name')
             ->get();
 
+		$all = array();
         foreach ($regions as $region) {
-            $cities[$region->name] = $region->cities->lists('name', 'id');
+            $newRegion = array(
+				'_id' => \App\Library\Utils::slugify($region->name),
+				'name' => $region->name,
+				'slug' => \App\Library\Utils::slugify($region->name),
+				'cities' => array(),
+			);
+			foreach ($region->cities as $city) {
+				array_push($newRegion['cities'], array(
+					'_id' => \App\Library\Utils::slugify($city->name),
+					'name' => $city->name,
+					'slug' => \App\Library\Utils::slugify($city->name),
+					'lat' => $city->lat,
+					'lng' => $city->lng,
+				));
+			}
+			array_push($all, $newRegion);
         }
-
-        return $cities;
+		var_export($all); exit;
+        return $all;
     }
 }

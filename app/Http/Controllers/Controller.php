@@ -10,9 +10,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 abstract class Controller extends BaseController {
 
 	use DispatchesCommands, ValidatesRequests;
-    
-    
-    
+
     /**
      * This is used to determine whether to render with view script, or json
      * @param string $view View script
