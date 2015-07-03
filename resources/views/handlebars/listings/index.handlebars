@@ -1,0 +1,19 @@
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li>Listings</li>
+</ol>
+
+<table class="table table-striped">
+    <tr>
+        <td>Name</td>
+        <td>City</td>
+        <!-- <td>Tags</td> -->
+    </tr>
+    {{#each listings}}
+    <tr>
+        <td>{{name}}</td>
+        <td>{{city}}</td>
+        <!-- <td>{{tags}}</td> -->
+    </tr>
+    {{/each}}
+</table>

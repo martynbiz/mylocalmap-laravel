@@ -34,23 +34,30 @@ Handlebars
 - ensure works for homepages, crud ops,
 - how to handle partials?
 
-MongoDB
-- Regions/ cities in Mongo, Jump to.. (geos in data-*)
-- Tags in mongodb
+MongoDB classes
+- created_at, etc - put in DB, find only fetches un-deleted
 
 ACL
+- put users into mongo/ create provider for mongo
 - use isAdmin/ isModerator etc for now
 
-Acl - reported error
-https://github.com/kodeine/laravel-acl/issues/28
+- search from home -> /listing (before map clusting)
 
 MAP (google maps api, clustering, ui filters)
 Filters - Food: supermarkets, farmers' market, butchers, greengrocers, bakery, fish mongers, coffee shops, alchohol; co-operatives, indy record shops, second hand ; clothing,
 On change: reload data
 http://fronteed.com/iCheck/
 
-VOTES
-COMMENTS
+Pages
+
+- listing/show
+- listing/edit
+- admin/listing
+- admin/tags
+- admin/users (acl)
+
+- comments
+- voting
 
 
 
@@ -64,7 +71,7 @@ USERS (MongoDB)
 
 JAVASCRIPT
 - load templates via JS
--
+- Jump to.. (geos in data-*), tags
 
 TESTING
 - *_testing database
@@ -91,3 +98,7 @@ Splash overlay - what we're about, "OK" button close
 
 
 Click on result/ pin: open
+
+
+Acl - reported error
+https://github.com/kodeine/laravel-acl/issues/28

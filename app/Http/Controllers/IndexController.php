@@ -7,7 +7,7 @@ use MongoClient;
 use MongoId;
 use App\Region;
 use App\Group;
-use App\City;
+// use App\City;
 
 class IndexController extends Controller {
 

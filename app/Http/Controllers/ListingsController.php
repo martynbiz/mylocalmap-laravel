@@ -29,10 +29,6 @@ class ListingsController extends Controller {
     {
         $this->listings = new Listing( new MongoClient(), env('MONGO_DB') );
 
-        // // set our controller's model
-        // $conn = new MongoClient();
-        // $this->listings = $conn->selectDB( env('MONGO_DB') )->listings;
-
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
@@ -44,8 +40,10 @@ class ListingsController extends Controller {
 	 */
 	public function index()
 	{
+        $listings = $this->listings->find();
+
         // render the view script, or json if ajax request
-        return $this->render('listings.index');
+        return $this->render('listings.index', compact('listings'));
 	}
 
     /**
@@ -85,52 +83,12 @@ class ListingsController extends Controller {
 	{
 		$values = $request->input();
 
+        // set the lat/lng to values
+        $this->setLatLng($values);
 
-        // fetch the geocodes for this address
-		// $city = $c->findOrFail( $request->get('city_id') );
-		$fullAddress = $values['address'] . ', United Kingdom';
-
-        // **use... put this in protected property (update will use)
-		$curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-		$geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-		// fetch the address
-		$geos = $geocoder
-			->limit(1)
-			->geocode($fullAddress);
-
-        if ( $geos->count() ) {
-            $values = array_merge($values, [
-                'lat' => $geos->first()->getLatitude(),
-                'lng' => $geos->first()->getLongitude(),
-            ]);
-        }
-
-
-		// // *****mongodb
-        //
-        // //
-        // $fillable = array(
-        //     'name',
-        //     'description_short',
-        //     'description_long',
-        //     'address',
-        //     // 'city_id',
-        //     'lat',
-        //     'lng',
-        // );
-        //
-        // $values = array_intersect_key($values, array_flip($fillable));
-        //
-		// // save listing with $values
-        // $seq = MongoDB::getNextSequence('listings');
-        // $values = array_merge( array(
-        //     '_id' => $seq,
-        // ), $values);
-
+        // insert to db
         $this->listings->insert($values);
-        // *****
-        dd($values);
+
         // redirect
         return redirect()->to('listings')->with([
             'flash_message' => 'A new listing has been created',
@@ -145,8 +103,7 @@ class ListingsController extends Controller {
 	 */
 	public function edit(AuthManager $auth, $id)
 	{
-		// will throw an exception if not found
-        $listing = $auth->user()->listings()->findOrFail($id);
+		//...
 
         // render the view script, or json if ajax request
         return $this->render('listings.edit', compact('listing'));
@@ -160,11 +117,7 @@ class ListingsController extends Controller {
 	 */
 	public function update(AuthManager $auth, ListingRequest $request, $id)
 	{
-		// will throw an exception if not found
-        $listing = $auth->user()->listings()->findOrFail($id);
-
-        // update the listing with the request params
-        $listing->update( $request->all() );
+		//...
 
         return redirect()->route('listings.show', [$id])->with([
             'flash_message' => 'Listing has been updated',
@@ -179,13 +132,38 @@ class ListingsController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		$listing = $this->listing->findOrFail($id);
-
-        // will throw an exception if not found
-        $listing->delete();
+		//...
 
         return redirect()->to('listings')->with([
             'flash_message' => 'Listing has been deleted',
         ]);
 	}
+
+
+    // protected/ private methods
+
+    /**
+     * Set the lat lng of $values from it's address
+     */
+    protected function setLatLng(&$values)
+    {
+        // fetch the geocodes for this address
+        // $city = $c->findOrFail( $request->get('city_id') );
+        $fullAddress = $values['address'] . ', United Kingdom';
+
+        $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
+        $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
+
+        // fetch the address
+        $geos = $geocoder
+            ->limit(1)
+            ->geocode($fullAddress);
+
+        if ( $geos->count() ) {
+            $values = array_merge($values, [
+                'lat' => $geos->first()->getLatitude(),
+                'lng' => $geos->first()->getLongitude(),
+            ]);
+        }
+    }
 }
