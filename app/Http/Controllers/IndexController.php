@@ -2,13 +2,6 @@
 
 use App\Library\SelectOptions;
 
-// models
-use MongoClient;
-use MongoId;
-use App\Region;
-use App\Group;
-// use App\City;
-
 class IndexController extends Controller {
 
 	/*
@@ -21,17 +14,6 @@ class IndexController extends Controller {
 	| controller as you wish. It is just here to get your app started!
 	|
 	*/
-
-	/**
-	 * Create a new controller instance.
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->regions = new Region( new MongoClient(), env('MONGO_DB') );
-		$this->groups = new Group( new MongoClient(), env('MONGO_DB') );
-	}
 
 	// public function index()
 	// {

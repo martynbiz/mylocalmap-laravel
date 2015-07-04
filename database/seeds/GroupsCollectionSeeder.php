@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\User;
 
-class TagsCollectionSeeder extends Seeder {
+class GroupsCollectionSeeder extends Seeder {
 
 	/**
 	 * Run the database seeds.
@@ -14,7 +14,7 @@ class TagsCollectionSeeder extends Seeder {
 	public function run()
 	{
 		$conn = new \MongoClient();
-		$db = $conn->selectDB(env('MONGO_DB'));
+		$db = $conn->selectDB(env('MONGO_DATABASE'));
 		$collection = $db->groups;
 
 
@@ -32,7 +32,10 @@ class TagsCollectionSeeder extends Seeder {
 						'name' => 'Fishmonger',
 					),
 					array(
-						'name' => 'Bakers',
+						'name' => 'Baker',
+					),
+					array(
+						'name' => 'Butcher',
 					),
 					array(
 						'name' => 'Coffee Shop',
@@ -81,8 +84,6 @@ class TagsCollectionSeeder extends Seeder {
 		}
 
 		// now insert
-		$conn = new \MongoClient();
-		$db = $conn->selectDB(env('MONGO_DB'));
 		foreach ($groups as $group) {
 			$db->groups->insert($group);
 		}

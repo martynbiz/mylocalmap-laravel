@@ -1,8 +1,14 @@
 My Local Map
 
+*quick todo
+- validate listings: description max size, at least one tag
+- new tags: cake shop, deli, fruit n veg -> greengrocer
+
 Introduction
 
 My Local Map is software written in Laravel for creating location based directories.
+
+Possible uses - specialized business directory, campsite directory, 
 
 Server requirements
 
@@ -18,7 +24,12 @@ composer install
 npm install
 bower install -- do we still need this? we are versioning the files anyway?
 
+Developer Guide
 
+Databases
+
+MyLocalMap uses two databases: MongoDB, and MySQL. As we use Laravel's out of the box
+authentication, and possibly ACL - I've stuck with Eloquent.
 
 
 
@@ -27,15 +38,9 @@ Things to add to base-theme: (if i start a new project from this one - merge in 
 
 TODO:
 
-Bootstrap
-- move classes (e.g. col-md-4) as mixins
 
-Handlebars
-- ensure works for homepages, crud ops,
-- how to handle partials?
-
-MongoDB classes
-- created_at, etc - put in DB, find only fetches un-deleted
+MongoDB vs
+- city, tags: how to output e.g stirling -> Stirling
 
 ACL
 - put users into mongo/ create provider for mongo
@@ -60,6 +65,13 @@ Pages
 - voting
 
 
+Javascript changes
+- Templates: Handlebar loading
+- Collapsible groups/tags
+- Store stuff in cookies/account? (e.g. location)
+-
+
+
 
 
 V2
@@ -77,9 +89,17 @@ TESTING
 - *_testing database
 - mock auth
 
+
 Enhancement
+
 - mongodb, heavy use of tags?
 - time to put mongo into n odm? or no?
+- bring back turbo links
+
+
+
+
+
 
 
 
@@ -87,6 +107,7 @@ Enhancement
 
 flaws with atom:
 - when i rename an open file, it closes that file (do like sublime)
+- no file preview like sublime
 
 
 

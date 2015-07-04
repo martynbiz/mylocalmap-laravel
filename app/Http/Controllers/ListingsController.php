@@ -2,14 +2,10 @@
 
 // libraries
 use Illuminate\Auth\AuthManager;
-use App\Library\SelectOptions;
-
-use App\Library\Mongo\DB as MongoDB;
 
 // models
 use MongoClient;
-use MongoId;
-use App\Listing; //**put this into mongodb, seed?
+use App\Listing;
 
 // requests
 use Request;
@@ -27,7 +23,9 @@ class ListingsController extends Controller {
      */
     public function __construct()
     {
-        $this->listings = new Listing( new MongoClient(), env('MONGO_DB') );
+        parent::__construct();
+
+        $this->listings = new Listing( new MongoClient(), env('MONGO_DATABASE') );
 
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -40,7 +38,61 @@ class ListingsController extends Controller {
 	 */
 	public function index()
 	{
-        $listings = $this->listings->find();
+        // **think we need to do aggregate to do two queries
+
+        $query = [];
+
+        // check if bounds have been passed, if so, build
+        // geowithin query
+        if ($bounds = Request::input('bounds')) {
+
+            //make north, east, etc points
+            $bounds = explode(',', $bounds);
+            array_walk($bounds, function(&$value) {
+                $value = floatval($value);
+            });
+            list($south_lat, $west_lng, $north_lat, $east_lng) = $bounds;
+
+            //
+            $query['loc'] = [
+                '$geoWithin' => [
+                    '$geometry' => [
+                        'type' => 'Polygon' ,
+                        'coordinates' => [
+                            [
+                                [ $east_lng, $north_lat ], //ne
+                                [ $west_lng, $north_lat ], //nw
+                                [ $west_lng, $south_lat ], //sw
+                                [ $east_lng, $south_lat ], //se
+                                [ $east_lng, $north_lat ], //ne
+                            ]
+                        ]
+                    ]
+                ]
+            ]; // end $query
+        }
+
+        // check if tags have been passed, if so, set tags
+        if ($tags = Request::input('tags')) {
+
+            // db.listings.aggregate([
+            //     {
+            //         $match: {
+            //             "tags": {
+            //                 $in: ['butcher', 'fruit-n-veg', 'alcohol']
+            //             }
+            //         }
+            //     }
+            // ]);
+            //http://stackoverflow.com/questions/27326748/mongodb-find-documents-that-match-the-most-tags
+
+
+
+        }
+
+        $listings = $this->listings->find($query);
+
+        // dd($listings);
 
         // render the view script, or json if ajax request
         return $this->render('listings.index', compact('listings'));
@@ -68,10 +120,14 @@ class ListingsController extends Controller {
 	public function create()
 	{
 		// pick up old POST values if redirect (error)
-        $listing = Request::old();
+        $params = Request::old();
+
+        // get regions for the select options
+        $regions = $this->regions->find();
+        $groups = $this->groups->find();
 
         // render the view script, or json if ajax request
-        return $this->render('listings.create', compact('listing', 'cityOptions'));
+        return $this->render('listings.create', compact('params', 'regions', 'groups'));
 	}
 
 	/**
@@ -82,9 +138,6 @@ class ListingsController extends Controller {
 	public function store(AuthManager $auth, ListingRequest $request)
 	{
 		$values = $request->input();
-
-        // set the lat/lng to values
-        $this->setLatLng($values);
 
         // insert to db
         $this->listings->insert($values);
@@ -138,32 +191,4 @@ class ListingsController extends Controller {
             'flash_message' => 'Listing has been deleted',
         ]);
 	}
-
-
-    // protected/ private methods
-
-    /**
-     * Set the lat lng of $values from it's address
-     */
-    protected function setLatLng(&$values)
-    {
-        // fetch the geocodes for this address
-        // $city = $c->findOrFail( $request->get('city_id') );
-        $fullAddress = $values['address'] . ', United Kingdom';
-
-        $curl     = new \Ivory\HttpAdapter\CurlHttpAdapter();
-        $geocoder = new \Geocoder\Provider\GoogleMaps($curl);
-
-        // fetch the address
-        $geos = $geocoder
-            ->limit(1)
-            ->geocode($fullAddress);
-
-        if ( $geos->count() ) {
-            $values = array_merge($values, [
-                'lat' => $geos->first()->getLatitude(),
-                'lng' => $geos->first()->getLongitude(),
-            ]);
-        }
-    }
 }

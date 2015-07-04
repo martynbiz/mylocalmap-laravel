@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('UsersTableSeeder');
 
 		$this->call('RegionsCollectionSeeder');
-		$this->call('TagsCollectionSeeder');
+		$this->call('GroupsCollectionSeeder');
 	}
 
 }

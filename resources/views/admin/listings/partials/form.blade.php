@@ -36,7 +36,7 @@
 		@foreach($groups as $group)
 			<fieldset>
 				@foreach($group['tags'] as $tag)
-				<label class="col-md-3 col-xs-12">
+				<label class="col-md-3">
 					{!! Form::checkbox('tags[]', $tag['_id']) !!}
 					{{ $tag['name'] }}
 				</label>

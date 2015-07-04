@@ -14,7 +14,7 @@ class RegionsCollectionSeeder extends Seeder {
 	public function run()
 	{
 		$conn = new \MongoClient();
-		$db = $conn->selectDB(env('MONGO_DB'));
+		$db = $conn->selectDB(env('MONGO_DATABASE'));
 		$collection = $db->regions;
 
 

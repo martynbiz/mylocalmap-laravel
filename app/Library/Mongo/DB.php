@@ -43,12 +43,12 @@ class DB
 
          // only if _id is not set, we'll use sequence
          if (!isset($values['_id'])) {
-             $seq = $this->getNextSequence( $this->col->getName() );
+             $seq = $this->getNextSequence();
              $values = array_merge( array(
                  '_id' => $seq,
              ), $values);
          }
-
+// dd($values);
          // do the insert
          $this->col->insert($values);
      }
@@ -56,20 +56,25 @@ class DB
      /**
       *
       */
-      function find($query=[])
+      function find($query=[], $options=[])
       {
+          // set defaults
+          $options = array_merge([
+              'userKeys' => false,
+          ], $options);
+
           $cursor = $this->col->find($query);
 
-          return iterator_to_array($cursor);
+          return iterator_to_array($cursor, $options['userKeys']);
       }
 
     /**
      * Get the next in sequence number
      */
-    public function getNextSequence($name)
+    public function getNextSequence()
     {
         $ret = $this->db->counters->findAndModify(
-            array( '_id' => $name),
+            array( '_id' => $this->col->getName()),
             array('$inc' => array('seq' => 1)),
             array(),
             array('new' => true)

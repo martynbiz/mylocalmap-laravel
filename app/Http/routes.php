@@ -20,3 +20,12 @@ Route::controllers([
 ]);
 
 Route::resource('listings', 'ListingsController');
+
+
+// admin/...
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.admin'], function() {
+
+	// admin/
+	Route::resource('listings', 'Admin\ListingsController');
+});
