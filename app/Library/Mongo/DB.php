@@ -40,8 +40,10 @@ class DB
         if (!isset($this->fillable) or !is_array($this->fillable))
             throw new \Exception('Fillable array not set.');
 
-        // remove any keys not within fillable
-        $values = array_intersect_key($values, array_flip($this->fillable));
+        // remove any keys not within fillable, and set defaults
+        // $values = array_intersect_key($values, array_flip($this->fillable));
+        $values = array_intersect_key($values, $this->fillable);
+        $values = array_merge($this->fillable, $values);
 
         // only if _id is not set, we'll use sequence
         if (!isset($values['_id'])) {

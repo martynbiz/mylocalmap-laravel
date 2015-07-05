@@ -41,8 +41,6 @@ class ListingsController extends Controller {
         // $listings = $this->listings->find($query);
         $listings = $this->listings->filter( Request::input() );
 
-        // dd($listings);
-
         // render the view script, or json if ajax request
         return $this->render('listings.index', compact('listings'));
 	}
@@ -106,12 +104,18 @@ class ListingsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(AuthManager $auth, $id)
+	public function edit($id)
 	{
-		//...
+		$listing = $this->listings->findOneOrFail([
+            '_id' => (int) $id,
+        ]);
+
+        // get regions for the select options
+        $regions = $this->regions->find();
+        $groups = $this->groups->find();
 
         // render the view script, or json if ajax request
-        return $this->render('listings.edit', compact('listing'));
+        return $this->render('listings.edit', compact('listing', 'regions', 'groups'));
 	}
 
 	/**
@@ -122,7 +126,7 @@ class ListingsController extends Controller {
 	 */
 	public function update(AuthManager $auth, ListingRequest $request, $id)
 	{
-		//...
+		dd(Request::input());
 
         return redirect()->route('listings.show', [$id])->with([
             'flash_message' => 'Listing has been updated',

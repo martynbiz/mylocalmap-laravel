@@ -10,7 +10,7 @@
     </ol>
 
     <div class="controls" style="position: absolute; right: 10px; top: 10px;">
-        <a href="#">Edit</a> | <a href="#">Delete</a>
+        <a href="{{url('/listings/' . $listing['_id'] . '/edit')}}">Edit</a> | <a href="{{url('/listings/' . $listing['_id'] . '/delete')}}">Delete</a>
     </div>
 </div>
 
@@ -22,10 +22,10 @@
                 Description
             </div>
             <div class="panel-body">
-                @if(isset($listing['description']))
-                    {{ $listing['description'] }}
+                @if(!isset($listing['description']) or empty($listing['description']))
+                    <a href="{{url('/listings/' . $listing['_id'] . '/edit')}}">Write a description</a>
                 @else
-                    <a href="#">Write a description</a>
+                    {{ $listing['description'] }}
                 @endif
             </div>
         </div>
@@ -41,33 +41,34 @@
                 </div>
 
                 <div class="phone">
-                    <span class="glyphicon glyphicon-phone-alt"></span>
-                    @if(isset($listing['phone']))
-                        {{ $listing['phone'] }}
+                    @if(!isset($listing['phone']) or empty($listing['phone']))
+                        <a href="{{url('/listings/' . $listing['_id'] . '/edit')}}">Add a phone number</a>
                     @else
-                        <a href="#">Add a phone number</a>
+                        <span class="glyphicon glyphicon-phone-alt"></span>
+                        {{ $listing['phone'] }}
                     @endif
                 </div>
 
                 <div class="website">
-                    <span class="glyphicon glyphicon glyphicon-link"></span>
-                    @if(isset($listing['website']))
-                        {{ $listing['website'] }}
+                    @if(!isset($listing['website']) or empty($listing['website']))
+                        <a href="{{url('/listings/' . $listing['_id'] . '/edit')}}">Add a website</a>
                     @else
-                        <a href="#">Add a website</a>
+                        <span class="glyphicon glyphicon glyphicon-link"></span>
+                        {{ $listing['website'] }}
                     @endif
                 </div>
 
                 <div class="opening-hours">
-                    <span class="glyphicon glyphicon glyphicon-time"></span>
-                    @if(isset($listing['opening_hours']))
-                        {{ $listing['opening_hours'] }}
+                    @if(!isset($listing['opening_hours']) or empty($listing['opening_hours']))
+                        <a href="{{url('/listings/' . $listing['_id'] . '/edit')}}">Add opening hours</a>
                     @else
-                        <a href="#">Add opening hours</a>
+                        <span class="glyphicon glyphicon glyphicon-time"></span>
+                        {{ $listing['opening_hours'] }}
                     @endif
                 </div>
             </div>
         </div>
+        
     </div>
 
     <div class="col-xs-5">

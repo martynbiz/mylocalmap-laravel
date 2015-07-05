@@ -11604,12 +11604,14 @@ var map = map || (function() {
                 _initMapObject(container, {
                     zoom: 18,
                     lat: listing.loc[1],
-                    lng: listing.loc[0]
+                    lng: listing.loc[0],
                 });
 
                 // set the map
                 _setMarker(listing, {
-                    infowindow: false
+                    infowindow: false,
+                    draggable: $(container).data('draggable') ? true : false,
+                    animation: $(container).data('draggable') ? google.maps.Animation.DROP : null
                 });
 
                 break;
@@ -11710,17 +11712,22 @@ var map = map || (function() {
 
         // set default
         var options = $.extend({
-            infowindow: true
+            infowindow: true,
+            draggable: false,
+            animation: null,
         }, options);
 
         var latLng = new google.maps.LatLng(listing.loc[1], listing.loc[0]);
 
         // Creating a marker if not previously loaded
         if (!_markers[listing._id]) {
+
             var marker = new google.maps.Marker({
                 position: latLng,
                 map: _map,
-                title: listing.name
+                title: listing.name,
+                draggable: options.draggable,
+                animation: options.animation
             });
 
             _markers[listing._id] = marker;
@@ -11747,6 +11754,14 @@ var map = map || (function() {
 
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(_map, marker);
+                });
+            }
+
+            // if draggable, set to draggable
+            if (options.draggable) {
+                google.maps.event.addListener(marker, 'dragend', function() {
+                    $("input[name='loc[1]']").val(marker.getPosition().lat());
+                    $("input[name='loc[0]']").val(marker.getPosition().lng());
                 });
             }
 

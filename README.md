@@ -42,7 +42,6 @@ TODO:
 
 Pages
 
-- listing/show
 - listing/edit
 - admin/listing (/approve)
 - admin/tags

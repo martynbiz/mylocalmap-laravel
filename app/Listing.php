@@ -11,17 +11,22 @@ class Listing extends DB {
     protected $collection = 'listings';
 
     /**
-     * Protect against mass assignment
+     * Protect against mass assignment, and provide
+     * default. As we get errors if array index doesn
+     * exist in the view, maybe better to have defaults
+     * encase missing .. maybe set to null to not use
+     * default?
      */
     protected $fillable = [
-        'name',
-        'description_short',
-        'description_long',
-        'address',
-        'city',
-        'loc',
-        'tags',
-        'groups'
+        'name' => '',
+        'description' => '',
+        'address' => '',
+        'city' => '',
+        'phone' => '',
+        'website' => '',
+        'opening_hours' => '',
+        'loc' => [0,0],
+        'tags' => [],
     ];
 
     /**
