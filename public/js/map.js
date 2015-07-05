@@ -1,3 +1,4 @@
+
 var map = map || (function() {
     
     // private 
@@ -6,20 +7,14 @@ var map = map || (function() {
 
     var _markers = {};
     
-    // to compenstate for the filters menu, we will offset the map
-    var _offset = {
-        lat: 0,
-        lng: -3
-    };
-    
     // start center when map loads
     var _startCenter = {
-        lat: (54.4 + _offset.lat),
-        lng: (-3.4 + _offset.lng)
+        lat: 54.4,
+        lng: -3.4
     };
 
     function _initialize() {
-
+        
         // initiate the map
         _map = new google.maps.Map( document.getElementById("map"), {
             center: new google.maps.LatLng(_startCenter.lat, _startCenter.lng),
@@ -119,8 +114,9 @@ var map = map || (function() {
     }
 
     function _moveToLocation(lat, lng, zoom) {
+        
         var center = new google.maps.LatLng(lat, lng);
-
+        
         // using global variable:
         _map.panTo(center);
         _map.setZoom(11);
