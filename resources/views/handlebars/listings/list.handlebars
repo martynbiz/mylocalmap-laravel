@@ -1,11 +1,13 @@
 <table class="table table-striped">
     <tr>
+        <td width="50"></td>
         <td>Name</td>
         <td>City</td>
         <!-- <td>Tags</td> -->
     </tr>
     {{#each listings}}
     <tr>
+        <td><input type="checkbox" name="id[]" value="{{_id}}"></td>
         <td>{{name}}</td>
         <td>{{city}}</td>
         <!-- <td>{{tags}}</td> -->

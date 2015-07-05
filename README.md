@@ -1,6 +1,6 @@
 My Local Map
 
-
+localfoodshops.net
 
 Introduction
 
@@ -57,7 +57,7 @@ Javascript changes
 GUI enhancements
 - groups collapse links
 - create page - 2 columns, groups collapse
-- 
+-
 
 
 

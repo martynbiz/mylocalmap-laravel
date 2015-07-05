@@ -58,7 +58,7 @@ class ListingsController extends Controller {
         $listing = $this->listings->findOneOrFail([
             '_id' => (int) $id,
         ]);
-        
+
         // render the view script, or json if ajax request
         return $this->render('listings.show', compact('listing'));
     }
@@ -94,8 +94,9 @@ class ListingsController extends Controller {
         $this->listings->insert($values);
 
         // redirect
-        return redirect()->to('listings')->with([
+        return redirect()->to('listings/' . $values['_id'])->with([
             'flash_message' => 'A new listing has been created',
+            // 'flash_important' => true,
         ]);
 	}
 

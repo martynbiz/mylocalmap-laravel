@@ -34,21 +34,23 @@ class DB
     /**
     *
     */
-    public function insert($values)
+    public function insert(&$values)
     {
         // protect against mass assignment
         if (!isset($this->fillable) or !is_array($this->fillable))
-        throw new \Exception('Fillable array not set.');
+            throw new \Exception('Fillable array not set.');
+
+        // remove any keys not within fillable
         $values = array_intersect_key($values, array_flip($this->fillable));
 
         // only if _id is not set, we'll use sequence
         if (!isset($values['_id'])) {
-        $seq = $this->getNextSequence();
-        $values = array_merge( array(
-        '_id' => $seq,
-        ), $values);
+            $seq = $this->getNextSequence();
+            $values = array_merge( array(
+                '_id' => $seq,
+            ), $values);
         }
-        
+
         // do the insert
         $this->col->insert($values);
     }
@@ -69,14 +71,22 @@ class DB
     }
 
     /**
-    * 
+    *
     */
     function findOneOrFail($query)
     {
         if (!$doc = $this->col->findOne($query))
-            throw new Exception('ID not found.');
-        
+            throw new \Exception('ID not found.');
+
         return $doc;
+    }
+
+    /**
+    *
+    */
+    function remove($query=[])
+    {
+        $this->col->remove($query);
     }
 
     /**

@@ -22,10 +22,10 @@ class ListingRequest extends Request {
 	public function rules()
 	{
 		return [
-			'name' => 'required|min:3',
-			'description_short' => 'required|min:3',
+			'name' => 'required|min:3|max:64',
+			// 'description' => 'required|min:3',
 			'address' => 'required|min:3',
-			// 'city_id' => 'required',
+			'city' => 'required',
 		];
 	}
 

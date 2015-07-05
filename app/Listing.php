@@ -27,7 +27,7 @@ class Listing extends DB {
     /**
      *
      */
-    public function insert($values)
+    public function insert(&$values)
     {
         // set the lat/lng to values
         $this->setLoc($values);
@@ -35,7 +35,7 @@ class Listing extends DB {
         // insert to db as normal
         parent::insert($values);
     }
-    
+
     /**
      * Will take a simple array of filter data from the front end
      * and generate the aggregate query for the collection
@@ -43,7 +43,7 @@ class Listing extends DB {
     public function filter($filters=[])
     {
         $ops = [];
-        
+
         if (isset($filters['bounds'])) {
 
             //make north, east, etc points
@@ -55,7 +55,7 @@ class Listing extends DB {
 
             //
             array_push($ops, [
-                '$match' => [ 
+                '$match' => [
                     'loc' => [
                         '$geoWithin' => [
                             '$geometry' => [
@@ -75,28 +75,28 @@ class Listing extends DB {
                 ]
             ]);
         }
-        
+
         // the browser/jquery can't send an empty array (?tags[]=?) but
-        // it would be useful for us as we want to pass an empty tags 
-        // array in if there are none specified (makes things look a 
+        // it would be useful for us as we want to pass an empty tags
+        // array in if there are none specified (makes things look a
         // little more precise on the front end). So we ensure that here
         if (isset($filters['tags'])) {
             $tags = $filters['tags'];
         } else {
             $tags = [];
         }
-        
+
         array_push($ops, [
             '$match' => [
                 'tags' => [
                     '$in' => $tags,
-                ] 
+                ]
             ]
         ]);
-        
+
         return $this->col->aggregate($ops)['result'];
     }
-    
+
 
     /**
      * Set the lat lng of $values from it's address

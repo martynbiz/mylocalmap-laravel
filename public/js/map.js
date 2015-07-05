@@ -1,48 +1,103 @@
 
 var map = map || (function() {
-    
-    // private 
-    
+
+    // private
+
     var _map;
 
     var _markers = {};
-    
+
     // start center when map loads
     var _startCenter = {
         lat: 54.4,
         lng: -3.4
     };
 
-    function _initialize() {
-        
-        // initiate the map
-        _map = new google.maps.Map( document.getElementById("map"), {
-            center: new google.maps.LatLng(_startCenter.lat, _startCenter.lng),
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
+    function _init() {
+
+        var container = document.getElementById("map");
+
+        switch ($(container).data('type')) {
+            case 'single':
+
+                // display a single marker
+
+                // get the listing data from the attribute
+                var listing = $(container).data('listing');
+
+                // initiate the map
+                _initMapObject(container, {
+                    zoom: 18,
+                    lat: listing.loc[1],
+                    lng: listing.loc[0]
+                });
+
+                // set the map
+                _setMarker(listing, {
+                    infowindow: false
+                });
+
+                break;
+            case 'multi':
+            default:
+
+                // prepare the map for multi show (e.g. homepage)
+
+                // initiate the map
+                _initMapObject(container, {
+                    zoom: 6
+                });
+
+                /// prepare filters
+
+                // set region/city select to move to location when
+                // changed. we can rely on "idle" event listener to
+                // reload _markers
+                $('.filters select[name="city"]').on("change", function() {
+                    var lat = $(this).find(':selected').data('lat'),
+                        lng = $(this).find(':selected').data('lng');
+                    _moveToLocation(lat, lng);
+                });
+
+                // set region/city select to move to location when
+                // changed
+                $('.filters .groups .tags input[type="checkbox"]').on("change", function() {
+                    _removeMarkers();
+                    _loadMarkers();
+                });
+
+                // set *_changed events so that markers are re-loaded when
+                // the map changes
+                google.maps.event.addListener(_map,'idle',function() {
+                    _loadMarkers();
+                });
+
+        }
+
+    }
+
+    /**
+     * This will set the map objects to the values passed in
+     * @param DOMelement container The DOM element of the map container
+     * @param Object options Options from the map (e.g. zoom, lat, lng)
+     */
+    function _initMapObject(container, options) {
+
+        // set default
+        var options = $.extend({
+            lat: _startCenter.lat,
+            lng: _startCenter.lng,
             zoom: 6
+        }, options);
+
+        // set object
+        _map = new google.maps.Map( container, {
+            center: new google.maps.LatLng(options.lat, options.lng),
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            zoom: options.zoom
         } );
-        
-        // set region/city select to move to location when
-        // changed. we can rely on "idle" event listener to 
-        // reload _markers
-        $('.filters select[name="city"]').on("change", function() {
-            var lat = $(this).find(':selected').data('lat'),
-                lng = $(this).find(':selected').data('lng');
-            _moveToLocation(lat, lng);
-        });
 
-        // set region/city select to move to location when
-        // changed
-        $('.filters .groups .tags input[type="checkbox"]').on("change", function() {
-            _loadMarkers();
-        });
-
-        // set *_changed events so that markers are re-loaded when
-        // the map changes
-        google.maps.event.addListener(_map,'idle',function() {
-            _loadMarkers();
-        });
-    };
+    }
 
     function _loadMarkers() {
 
@@ -69,63 +124,88 @@ var map = map || (function() {
             method: "GET",
             data: data,
             success: function(data) {
-
                 $(data['listings']).each(function(index, listing) {
-                  var latLng = new google.maps.LatLng(listing.loc[1], listing.loc[0]);
-
-                  // Creating a marker if not previously loaded
-                  if (!_markers[listing._id]) {
-                      var marker = new google.maps.Marker({
-                        position: latLng,
-                        map: _map,
-                        title: listing.name
-                      });
-                      
-                      _markers[listing._id] = marker;
-
-                        // create the info window
-                        var contentString = '<div class="infowindow">'+
-                            '<h2>'+listing["name"]+'</h2>'+
-                            '<p class="rating">'+
-                                '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
-                                '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
-                                '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
-                                '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
-                                '<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>' +
-                            '</p>'+
-                            '<p>'+listing["description_short"]+'</p>'+
-                            '<p>'+listing["address"]+'</p>'+
-                            '<p><a href="/listings/'+listing["_id"]+'">Go to page</a></p>'+
-                        '</div>';
-
-                        var infowindow = new google.maps.InfoWindow({
-                            content: contentString
-                        });
-
-                        google.maps.event.addListener(marker, 'click', function() {
-                            infowindow.open(_map, marker);
-                        });
-                        
-                    }
-
-               });
+                    _setMarker(listing);
+                });
             }
         });
     }
 
+    function _setMarker(listing, options) {
+
+        // set default
+        var options = $.extend({
+            infowindow: true
+        }, options);
+
+        var latLng = new google.maps.LatLng(listing.loc[1], listing.loc[0]);
+
+        // Creating a marker if not previously loaded
+        if (!_markers[listing._id]) {
+            var marker = new google.maps.Marker({
+                position: latLng,
+                map: _map,
+                title: listing.name
+            });
+
+            _markers[listing._id] = marker;
+
+            if (options.infowindow) {
+                // create the info window
+                var contentString = '<div class="infowindow">'+
+                    '<h2>'+listing["name"]+'</h2>'+
+                    '<p class="rating">'+
+                        '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
+                        '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
+                        '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
+                        '<span class="glyphicon glyphicon-star" aria-hidden="true"></span>' +
+                        '<span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>' +
+                    '</p>'+
+                    '<p>'+listing["description_short"]+'</p>'+
+                    '<p>'+listing["address"]+'</p>'+
+                    '<p><a href="/listings/'+listing["_id"]+'">Go to page</a></p>'+
+                '</div>';
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(_map, marker);
+                });
+            }
+
+        }
+    }
+
     function _moveToLocation(lat, lng, zoom) {
-        
+
         var center = new google.maps.LatLng(lat, lng);
-        
+
         // using global variable:
         _map.panTo(center);
         _map.setZoom(11);
     }
-    
+
+    /**
+     * This is to remove all markers from the map. Used
+     * when we need to redraw (e.g. set tag filters, not move)
+     */
+    function _removeMarkers() {
+
+        // remove marker
+        for (var i in _markers) {
+            _markers[i].setMap(null);
+        }
+
+        // empty _markers
+        _markers = {};
+    }
+
     // public
-    
+
     return {
-        initialize: _initialize
+        init: _init
     };
-    
+
 })();

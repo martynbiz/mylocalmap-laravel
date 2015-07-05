@@ -22,6 +22,7 @@
 				</li>
 					<li>
 						<a href="{{ url('listings/create') }}">
+							<span class="glyphicon glyphicon glyphicon-plus"></span>
 							Add listing
 						</a>
 					</li>

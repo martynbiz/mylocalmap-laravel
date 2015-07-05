@@ -8,27 +8,6 @@
 		    ]) !!}
 		</div>
 	</div>
-
-	<div class="form-group">
-	    {!! Form::label('description_short', 'Short description', ['class' => 'col-md-2']) !!}
-	    <div class="col-md-10">
-		    {!! Form::text('description_short', null, [
-		    	'class'=>'form-control',
-		    	'length' => 64,
-		    	'placeholder' => 'Ex. Wide range of local produce from farmers in the Glasgow area.',
-		    ]) !!}
-		</div>
-	</div>
-
-	<div class="form-group">
-	    {!! Form::label('description_long', 'Long description (optional)', ['class' => 'col-md-2']) !!}
-	    <div class="col-md-10">
-		    {!! Form::textarea('description_long', null, [
-		    	'class'=>'form-control',
-	    		'rows' => 4,
-		    ]) !!}
-		</div>
-	</div>
 </div>
 
 <div class="well col-md-12">
