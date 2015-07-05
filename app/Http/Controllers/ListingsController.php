@@ -55,8 +55,10 @@ class ListingsController extends Controller {
      */
     public function show($id)
     {
-        $listing = $this->listings->findOne(array('_id' => new MongoId($id)));
-
+        $listing = $this->listings->findOneOrFail([
+            '_id' => (int) $id,
+        ]);
+        
         // render the view script, or json if ajax request
         return $this->render('listings.show', compact('listing'));
     }

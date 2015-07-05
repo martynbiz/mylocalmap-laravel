@@ -1,14 +1,12 @@
 My Local Map
 
-*quick todo
-- validate listings: description max size, at least one tag
-- new tags: cake shop, deli, fruit n veg -> greengrocer
+
 
 Introduction
 
 My Local Map is software written in Laravel for creating location based directories.
 
-Possible uses - specialized business directory, campsite directory, 
+Possible uses - specialized business directory, campsite directory, co-operatives, charties
 
 Server requirements
 
@@ -34,47 +32,50 @@ authentication, and possibly ACL - I've stuck with Eloquent.
 
 
 
-Things to add to base-theme: (if i start a new project from this one - merge in the current branch, then remove stuff base-theme doesn't need e.g. controllers, views, libraries, etc), commit base-theme, create new branch from that :)
+
 
 TODO:
 
-
-MongoDB vs
-- city, tags: how to output e.g stirling -> Stirling
-
-ACL
-- put users into mongo/ create provider for mongo
-- use isAdmin/ isModerator etc for now
-
-- search from home -> /listing (before map clusting)
-
-MAP (google maps api, clustering, ui filters)
-Filters - Food: supermarkets, farmers' market, butchers, greengrocers, bakery, fish mongers, coffee shops, alchohol; co-operatives, indy record shops, second hand ; clothing,
-On change: reload data
-http://fronteed.com/iCheck/
+*quick todo
+- validate listings: description max size, at least one tag
+- new tags: cake shop, deli, fruit n veg -> greengrocer, music shops, co-operatives
 
 Pages
 
 - listing/show
 - listing/edit
-- admin/listing
+- admin/listing (/approve)
 - admin/tags
 - admin/users (acl)
 
-- comments
-- voting
-
 
 Javascript changes
-- Templates: Handlebar loading
-- Collapsible groups/tags
+- tick groups, check/uncheck all
 - Store stuff in cookies/account? (e.g. location)
 -
 
+GUI enhancements
+- groups collapse links
+- create page - 2 columns, groups collapse
+- 
 
 
 
 V2
+
+Javascript changes
+- Templates: Handlebar loading
+
+notifications
+
+- comments
+- voting
+
+Checkboxes
+http://fronteed.com/iCheck/
+
+MAP
+- clustering
 
 USERS (MongoDB)
 - move to mongo - create new authentication classes, middleware, etc
@@ -88,7 +89,6 @@ JAVASCRIPT
 TESTING
 - *_testing database
 - mock auth
-
 
 Enhancement
 
