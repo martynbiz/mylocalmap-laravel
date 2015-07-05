@@ -3,7 +3,7 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="with_bigmap" onload="initialize();">
+    <body class="with_bigmap">
         @include('partials.header')
         
         <div id="layout_content">

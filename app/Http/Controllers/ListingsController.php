@@ -38,59 +38,8 @@ class ListingsController extends Controller {
 	 */
 	public function index()
 	{
-        // **think we need to do aggregate to do two queries
-
-        $query = [];
-
-        // check if bounds have been passed, if so, build
-        // geowithin query
-        if ($bounds = Request::input('bounds')) {
-
-            //make north, east, etc points
-            $bounds = explode(',', $bounds);
-            array_walk($bounds, function(&$value) {
-                $value = floatval($value);
-            });
-            list($south_lat, $west_lng, $north_lat, $east_lng) = $bounds;
-
-            //
-            $query['loc'] = [
-                '$geoWithin' => [
-                    '$geometry' => [
-                        'type' => 'Polygon' ,
-                        'coordinates' => [
-                            [
-                                [ $east_lng, $north_lat ], //ne
-                                [ $west_lng, $north_lat ], //nw
-                                [ $west_lng, $south_lat ], //sw
-                                [ $east_lng, $south_lat ], //se
-                                [ $east_lng, $north_lat ], //ne
-                            ]
-                        ]
-                    ]
-                ]
-            ]; // end $query
-        }
-
-        // check if tags have been passed, if so, set tags
-        if ($tags = Request::input('tags')) {
-
-            // db.listings.aggregate([
-            //     {
-            //         $match: {
-            //             "tags": {
-            //                 $in: ['butcher', 'fruit-n-veg', 'alcohol']
-            //             }
-            //         }
-            //     }
-            // ]);
-            //http://stackoverflow.com/questions/27326748/mongodb-find-documents-that-match-the-most-tags
-
-
-
-        }
-
-        $listings = $this->listings->find($query);
+        // $listings = $this->listings->find($query);
+        $listings = $this->listings->filter( Request::input() );
 
         // dd($listings);
 

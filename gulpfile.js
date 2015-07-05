@@ -32,10 +32,17 @@ elixir(function(mix) {
         .copy('bower_components/bootstrap/dist/js/bootstrap.js', 'public/js/bootstrap.js')
         .coffee()
         .scripts([
+            
+            // third party libraries
             'jquery.js',
             'bootstrap.js',
-            'app.js',
-            'utils.js'
+            
+            // app libraries and widgets
+            'map.js',
+            'jquery-utils.js',
+            
+            'app.js'
+            
         ], 'public/js/_all.js', 'public/js')
     
     mix
