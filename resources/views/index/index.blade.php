@@ -46,7 +46,7 @@
 </div><!-- can't figure why this <div> is needed, maps doesn't load otherwise -->
 
 <div id="container">
-    <div id="map"></div>
+    <div id="map" data-cluster="false"></div>
 </div>
 
 <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&callback=map.init"></script>

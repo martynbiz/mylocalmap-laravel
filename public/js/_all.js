@@ -11588,7 +11588,7 @@ var map = map || (function() {
         lng: -3.4,
     };
 
-    var _zoomMax = null; //10
+    var _zoomMax = 10
 
     function _init() {
 
@@ -11648,7 +11648,11 @@ var map = map || (function() {
                 // set *_changed events so that markers are re-loaded when
                 // the map changes
                 google.maps.event.addListener(_map,'idle',function() {
-                    _loadMarkers();
+                    if ($(container).data('cluster')) {
+                        _loadMarkerCluster();
+                    } else {
+                        _loadMarkers();
+                    }
                 });
 
         }
@@ -11708,6 +11712,58 @@ var map = map || (function() {
                 });
             }
         });
+    }
+
+    function _loadMarkerCluster() {
+
+        // // only get points if zoomed enough in
+        // if (_zoomMax && _map.getZoom() < _zoomMax)
+        //     return false;
+
+        // set data to send to api
+        var data = _getFilterData();
+
+        // load markers
+        $.ajax({
+            url: "/listings",
+            method: "GET",
+            data: data,
+            success: function(data) {
+
+                var latLng, options;
+
+                // reset markers
+                _markers = [];
+
+                // loop through each data and build _markers array
+                $(data['listings']).each(function(index, listing) {
+                    _markers.push( new google.maps.Marker({
+                        'position': new google.maps.LatLng(listing.loc[1], listing.loc[0])
+                    }) );
+                });
+
+                var markerCluster = new MarkerClusterer(_map, _markers, {
+                    gridSize: 60,
+                });
+            }
+        });
+    }
+
+
+    function _getFilterData() {
+
+        // set data to send to api
+        return {
+            bounds: _map.getBounds().toUrlValue(),
+            tags: (function() {
+                // return the ids of all checkboxes as tags
+                var tags = [];
+                $(".filters .groups .tags input[type='checkbox']:checked").each(function(index, value) {
+                    tags.push($(value).val());
+                });
+                return tags
+            })()
+        };
     }
 
     function _setMarker(listing, options) {
