@@ -53,6 +53,11 @@ class DB
             ), $values);
         }
 
+        // set the dates
+        $values['created_at'] = date('Y-m-d H:i:s');
+        $values['updated_at'] = null;
+        $values['deleted_at'] = null;
+
         // do the insert
         $this->col->insert($values);
     }

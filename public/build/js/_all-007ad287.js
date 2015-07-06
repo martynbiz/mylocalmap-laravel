@@ -11585,8 +11585,10 @@ var map = map || (function() {
     // start center when map loads
     var _startCenter = {
         lat: 54.4,
-        lng: -3.4
+        lng: -3.4,
     };
+
+    var _zoomMax = null; //10
 
     function _init() {
 
@@ -11679,7 +11681,7 @@ var map = map || (function() {
     function _loadMarkers() {
 
         // only get points if zoomed enough in
-        if (_map.getZoom() < 10)
+        if (_zoomMax && _map.getZoom() < _zoomMax)
             return false;
 
         // set data to send to api

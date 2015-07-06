@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthManager;
 // models
 use MongoClient;
 use App\Listing;
+use App\ListingUpdate;
 
 // requests
 use Request;
@@ -18,6 +19,11 @@ class ListingsController extends Controller {
      */
     protected $listings;
 
+        /**
+         * @var App\ListingUpdate $listingUpdates The model for this controller
+         */
+        protected $listingUpdates;
+
     /**
      *
      */
@@ -26,6 +32,7 @@ class ListingsController extends Controller {
         parent::__construct();
 
         $this->listings = new Listing( new MongoClient(), env('MONGO_DATABASE') );
+        $this->listingUpdates = new ListingUpdate( new MongoClient(), env('MONGO_DATABASE') );
 
         // apply auth middleware to authenticate certain actions
         $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
@@ -119,17 +126,24 @@ class ListingsController extends Controller {
 	}
 
 	/**
-	 * Update the specified resource in storage.
+	 * Update the specified resource in storage. This doesn't do an update
+     * actually, but instead puts an entry in the listing_updates collection
 	 *
 	 * @param  int  $id
 	 * @return Response
 	 */
 	public function update(AuthManager $auth, ListingRequest $request, $id)
 	{
-		dd(Request::input());
+		$values = array_merge(Request::input(), [
+            'approved' => 0,
+            'listing_id' => (int) $id,
+        ]);
+
+        // insert to db
+        $this->listingUpdates->insert($values);
 
         return redirect()->route('listings.show', [$id])->with([
-            'flash_message' => 'Listing has been updated',
+            'flash_message' => 'Listing update is pending approval.',
         ]);
 	}
 

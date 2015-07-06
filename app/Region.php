@@ -29,7 +29,7 @@ class Region extends DB {
      * Protect against mass assignment
      */
     protected $fillable = [
-        'name', // e.g. Scotland
-        'cities', // array of cities
+        'name' => '', // e.g. Scotland
+        'cities' => [], // array of cities
     ];
 }

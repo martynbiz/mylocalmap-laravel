@@ -11,7 +11,7 @@
     </ol>
 </div>
 
-{!! Form::open(['action' => 'ListingsController@update', 'method' => 'PUT']) !!}
+{!! Form::open(['action' => ['ListingsController@update', $listing['_id']], 'method' => 'PUT']) !!}
 <div class="row">
     <div class="col-md-7">
 

@@ -49,6 +49,7 @@
     <div id="map"></div>
 </div>
 
-<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&callback=map.init" type="text/javascript"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&callback=map.init"></script>
+<script src="{{url('js/markerclusterer.js')}}"></script>
 
 @endsection

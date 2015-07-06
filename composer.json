@@ -10,7 +10,8 @@
 		"willdurand/geocoder": "^3.0",
 		"proai/laravel-handlebars": "^1.0",
 		"jenssegers/mongodb": "^2.1",
-		"google/apiclient": "^1.1"
+		"google/apiclient": "^1.1",
+		"martynbiz/diff": "dev-master"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",
