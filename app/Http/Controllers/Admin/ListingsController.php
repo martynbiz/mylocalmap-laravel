@@ -28,9 +28,6 @@ class ListingsController extends Controller {
         parent::__construct();
 
         $this->listings = new Listing( new MongoClient(), env('MONGO_DATABASE') );
-
-        // apply auth middleware to authenticate certain actions
-        $this->middleware('auth', ['only' => ['create', 'store', 'edit', 'update', 'destroy']]);
     }
 
 	/**

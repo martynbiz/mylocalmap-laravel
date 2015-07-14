@@ -45,11 +45,9 @@
 </div>
 </div><!-- can't figure why this <div> is needed, maps doesn't load otherwise -->
 
-<div id="container">
-    <div id="map" data-cluster="false"></div>
-</div>
+<div id="map" data-cluster="false"></div>
 
-<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&callback=map.init"></script>
+<script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places&callback=mapController.init"></script>
 <script src="{{url('js/markerclusterer.js')}}"></script>
 
 @endsection

@@ -87,17 +87,14 @@ class Listing extends DB {
         // little more precise on the front end). So we ensure that here
         if (isset($filters['tags'])) {
             $tags = $filters['tags'];
-        } else {
-            $tags = [];
-        }
-
-        array_push($ops, [
-            '$match' => [
-                'tags' => [
-                    '$in' => $tags,
+            array_push($ops, [
+                '$match' => [
+                    'tags' => [
+                        '$in' => $tags,
+                    ]
                 ]
-            ]
-        ]);
+            ]);
+        }
 
         return $this->col->aggregate($ops)['result'];
     }

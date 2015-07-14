@@ -12,12 +12,12 @@ use Illuminate\Auth\AuthManager;
 class TagsController extends Controller {
 
 	protected $tag;
-    
+
     public function __construct(Tag $tag)
     {
         $this->tag = $tag;
     }
-    
+
     /**
 	 * Display a listing of the resource.
 	 *
@@ -29,7 +29,7 @@ class TagsController extends Controller {
             ->with('questions') // so we can use total_questions
             ->orderBy('name') // alphabetical order
             ->paginate(15);
-        
+
         return $this->render('admin.tags.index', compact('tags'));
 	}
 
@@ -42,7 +42,7 @@ class TagsController extends Controller {
 	{
 		// we need an empty tag for the form
         $tag = new Tag;
-        
+
         return $this->render('admin.tags.create', compact('tag'));
 	}
 
@@ -54,7 +54,7 @@ class TagsController extends Controller {
 	public function store(TagRequest $request)
 	{
 		$this->tag->create( $request->all() );
-		
+
 		return redirect()->to('admin/tags')->with([
             'flash_message' => 'A new tag has been created',
         ]);
@@ -70,7 +70,7 @@ class TagsController extends Controller {
 	{
 		// will throw an exception if not found
         $tag = $this->tag->findOrFail($id);
-        
+
         return $this->render('admin.tags.edit', compact('tag'));
 	}
 
@@ -84,10 +84,10 @@ class TagsController extends Controller {
 	{
 		// will throw an exception if not found
         $tag = $this->tag->findOrFail($id);
-        
+
         // update the question with the request params
         $tag->update($request->all());
-        
+
         return redirect()->to('admin/tags')->with([
             'flash_message' => 'Question has been updated',
         ]);
@@ -102,10 +102,10 @@ class TagsController extends Controller {
 	public function destroy($id)
 	{
 		$tag = $this->tag->findOrFail($id);
-        
+
         // will throw an exception if not found
         $tag->delete();
-        
+
         return redirect()->to('admin/tags')->with([
             'flash_message' => 'Tag has been deleted',
         ]);

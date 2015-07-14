@@ -36,6 +36,9 @@ authentication, and possibly ACL - I've stuck with Eloquent.
 
 TODO:
 
+convert js to coffee
+* we don't need aggregate apparently 
+
 *quick todo
 - validate listings: description max size, at least one tag
 - new tags: cake shop, deli, fruit n veg -> greengrocer, music shops, co-operatives
@@ -49,6 +52,7 @@ Pages
 
 
 Javascript changes
+! when zooming, fetch all pins .. on the front end, filter by checkbox
 - tick groups, check/uncheck all
 - Store stuff in cookies/account? (e.g. location)
 -
@@ -91,6 +95,8 @@ TESTING
 
 Enhancement
 
+
+! revert back to eloquent? :/ .. we've had our fun with mongo, don't need it
 - mongodb, heavy use of tags?
 - time to put mongo into n odm? or no?
 - bring back turbo links
