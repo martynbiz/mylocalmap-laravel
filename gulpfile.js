@@ -38,7 +38,7 @@ elixir(function(mix) {
             'bootstrap.js',
 
             // app libraries and widgets
-            'map.js',
+            'map-controller.js',
             'jquery-utils.js',
 
             'app.js'

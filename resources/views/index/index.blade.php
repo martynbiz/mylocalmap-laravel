@@ -20,7 +20,7 @@
         <div class="panel-group form-group groups" id="accordion" role="tablist" aria-multiselectable="true">
             @foreach($groups as $group)
                 <fieldset class="panel panel-default">
-                    <div class="panel-heading">
+                    <div class="panel-heading group">
                         <input type="checkbox" class="js-show" checked>
                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_{{ $group['_id'] }}" aria-expanded="true" aria-controls="collapse_{{ $group['_id'] }}">
                             <label for="group_{{ $group['_id'] }}">

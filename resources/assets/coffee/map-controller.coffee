@@ -4,7 +4,10 @@ window.mapController = window.mapController || (->
     _map = null
 
     # @var object Store loaded markers here
-    _markers = {}
+    _active_markers = {}
+
+    # @var array Store data as we received it so it can be filtered again
+    _data = null
 
     # @var object Where to center the map on load
     _startCenter = {
@@ -16,15 +19,17 @@ window.mapController = window.mapController || (->
     _zoomMax = 10
 
 
-
     # called when initiating the map
     _init = () ->
 
+        # get the container div
         container = document.getElementById("map")
 
         # check what kind of map we're displaying: single, multi (marker), etc
         switch $(container).data('type')
             when 'single'
+
+                # get the json from the data attr
                 listing = $(container).data('listing')
 
                 # initiate the map
@@ -40,27 +45,38 @@ window.mapController = window.mapController || (->
                     draggable: if $(container).data('draggable') then true else false,
                     animation: if $(container).data('draggable') then google.maps.Animation.DROP else null
                 }
+
             when 'multi'
             else
 
+                # create the map object for a multi market
                 _initMapObject container, {
                     zoom: 6
                 }
 
                 # prepare filters
-
                 # set region/city select to move to location when
                 # dragged. we can rely on "idle" event listener to
-                # reload _markers
+                # reload _active_markers
                 $('.filters select[name="city"]').on "change", () ->
                     lat = $(this).find(':selected').data('lat')
                     lng = $(this).find(':selected').data('lng')
                     _moveToLocation(lat, lng)
 
+                # when a group checkbox is checked, set all child checkboxes
+                $('.filters .groups .group input[type="checkbox"]').on "change", () ->
+                    # set a refere
+                    group_checked = this.checked
+                    # set tags to same as group checkbox
+                    $(this).closest('.panel').find('.tags input[type="checkbox"]').prop "checked", group_checked
+                    # update markers based on tag checkboxes checked
+                    _updateMarkers()
+
                 # set region/city select to move to location when
                 # tags changed DELETED filter markers on front end instead
                 $('.filters .groups .tags input[type="checkbox"]').on "change", () ->
-                    console.log 'todo: filter markers based on tags'
+                    # update markers based on tag checkboxes checked
+                    _updateMarkers()
 
                 # set *_changed events so that markers are re-loaded when
                 # the map changes
@@ -97,6 +113,7 @@ window.mapController = window.mapController || (->
     # @param integer zoom Zoom value
     _moveToLocation = (lat, lng, zoom) ->
 
+        # set the center LatLng object
         center = new google.maps.LatLng(lat, lng)
 
         # using global variable:
@@ -110,102 +127,113 @@ window.mapController = window.mapController || (->
         # only get points if zoomed enough in
         if (_zoomMax && _map.getZoom() < _zoomMax) then return false;
 
-        # set data to send to api
-        data = {
-            bounds: _map.getBounds().toUrlValue(),
+        # load markers
+        $.ajax {
+            url: "/listings",
+            method: "GET",
+            data: {
+                bounds: _map.getBounds().toUrlValue(),
+            },
+            success: (data) ->
+                # set data so we can filter later
+                _data = data
+                # filter the tags
+                filtered_listings = _filterListingsByTags _data["listings"]
+                for i,listing of filtered_listings
+                    _setMarker listing
         }
+
+
+    # load marker cluster
+    _loadMarkerCluster = () ->
 
         # load markers
         $.ajax {
             url: "/listings",
             method: "GET",
-            data: data,
+            data: {
+                bounds: _map.getBounds().toUrlValue(),
+            },
             success: (data) ->
-
-                # return the ids of all checkboxes as tags
-                tags = []
-                $(".filters .groups .tags input[type='checkbox']:checked").each (index, value) ->
-                    tags.push $(value).val()
-
-                # filter the tags
-                console.log('todo: filter markers based on tags')
-
-                _setMarker listing for listing in data['listings']
+                # reset markers
+                _markers = [];
+                # loop through each data and build _markers array
+                $(data['listings']).each (index, listing) ->
+                    _markers.push new google.maps.Marker {
+                        'position': new google.maps.LatLng(listing.loc[1], listing.loc[0])
+                    }
+                # generate a map cluster
+                markerCluster = new MarkerClusterer _map, _markers, {
+                    gridSize: 60,
+                }
         }
 
+    # update the markers based on tags, not load
+    _updateMarkers = () ->
 
-     # load marker cluster
-     _loadMarkerCluster = () ->
+        # best to remove all tags as don't know from the filtered
+        # array which ones to remove
+        _removeMarkers()
 
-         # set data to send to api
-         data = _getFilterData()
-
-         # load markers
-         $.ajax {
-             url: "/listings",
-             method: "GET",
-             data: data,
-             success: (data) ->
-
-                 # reset markers
-                 _markers = [];
-
-                 # loop through each data and build _markers array
-                 $(data['listings']).each (index, listing) ->
-                     _markers.push new google.maps.Marker {
-                         'position': new google.maps.LatLng(listing.loc[1], listing.loc[0])
-                     }
-
-                 markerCluster = new MarkerClusterer _map, _markers, {
-                     gridSize: 60,
-                 }
-         }
+        # filter the tags
+        filtered_listings = _filterListingsByTags _data["listings"]
+        for i,listing of filtered_listings
+            _setMarker listing
 
 
-     # get the checked filter boxes as an array
-     _getFilterData = () ->
+    # get the selected tags from checkboxes
+    _getSelectedTags = () ->
 
-         # set data to send to api
-         return {
-             bounds: _map.getBounds().toUrlValue(),
-             tags: (->
-                 # return the ids of all checkboxes as tags
-                 tags = []
-                 $ ".filters .groups .tags input[type='checkbox']:checked").each( (index, value) ->
-                     tags.push($(value).val());
-
-                 #return tags
-             )()
-         }
+        tags = []
+        $(".filters .groups .tags input[type='checkbox']:checked").each (index, value) ->
+            tags.push($(value).val());
+        return tags
 
 
-     # set a single marker
-     # @param object listing A single listing
-     # @param object options Options for the marker
-     _setMarker = (listing, options) ->
+    # filter listings array of those that contain at least one tag from tags
+    # @param array markers Listing array
+    # @param array tags Listing of accepted tags
+    _filterListingsByTags = (listings) ->
 
-         # set default
-         options = $.extend {
-             infowindow: true,
-             draggable: false,
-             animation: null,
-         }, options
+        # return the ids of all checkboxes as tags
+        tags = _getSelectedTags()
 
-         latLng = new google.maps.LatLng listing.loc[1], listing.loc[0]
+        # return the result of the filter as filtered array
+        return listings.filter (listing) ->
+            for i,listing_tag of listing["tags"]
+                for j,tag of tags
+                    return true if listing_tag == tag
 
-         # Creating a marker if not previously loaded
-         if (!_markers[listing._id])
-             marker = new google.maps.Marker {
-                 position: latLng,
-                 map: _map,
-                 title: listing.name,
-                 draggable: options.draggable,
-                 animation: options.animation
-             }
 
-             _markers[listing._id] = marker;
 
-             if (options.infowindow)
+    # set a single marker
+    # @param object listing A single listing
+    # @param object options Options for the marker
+    _setMarker = (listing, options) ->
+
+        # set default
+        options = $.extend {
+            infowindow: true,
+            draggable: false,
+            animation: null,
+        }, options
+
+        # set the latLng from the listings loc
+        latLng = new google.maps.LatLng listing.loc[1], listing.loc[0]
+
+        # Creating a marker if not previously loaded
+        if (!_active_markers[listing._id])
+            marker = new google.maps.Marker {
+                position: latLng,
+                map: _map,
+                title: listing.name,
+                draggable: options.draggable,
+                animation: options.animation
+            }
+            # add the marker to the _active_markers object
+            _active_markers[listing._id] = marker;
+
+            if (options.infowindow)
 
                  # create the info window
                  contentString = '<div class="infowindow">'+
@@ -240,11 +268,13 @@ window.mapController = window.mapController || (->
      # when we need to redraw (e.g. set tag filters, not move)
      _removeMarkers = () ->
 
-         # remove marker
-         _markers[i].setMap(null) for i in _markers
+        # remove marker
+        for i,marker of _active_markers
+            marker.setMap(null)
 
-         # empty _markers
-         _markers = {};
+        # empty _active_markers
+        _active_markers = {};
+
 
      # public
      return {

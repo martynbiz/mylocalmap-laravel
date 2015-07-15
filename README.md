@@ -31,16 +31,19 @@ authentication, and possibly ACL - I've stuck with Eloquent.
 
 
 
-
+eloquent vs mongo
+- eloquent lets me ref users
+- mongo has neat map functions
+- i don't really need mongo now as doing filtering on front end
+- eloquent has auth user model
 
 
 TODO:
 
-convert js to coffee
-* we don't need aggregate apparently 
+* we don't need aggregate apparently
 
 *quick todo
-- validate listings: description max size, at least one tag
+- validate listings: description max size, at least one tag, tag is valid, 
 - new tags: cake shop, deli, fruit n veg -> greengrocer, music shops, co-operatives
 
 Pages
@@ -52,9 +55,9 @@ Pages
 
 
 Javascript changes
-! when zooming, fetch all pins .. on the front end, filter by checkbox
 - tick groups, check/uncheck all
-- Store stuff in cookies/account? (e.g. location)
+- on load hide tags: show arrow box "Select nearest town/city"; on selection,
+    show tags; list button for mobile too
 -
 
 GUI enhancements
